@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Built-By: kulin
+Build-Jdk: 10.0.2
+Implementation-Title: investment
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: pl.project.investment
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/investment
+Created-By: Maven Integration for Eclipse
+

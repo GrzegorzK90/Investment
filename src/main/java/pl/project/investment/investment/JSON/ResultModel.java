@@ -7,11 +7,11 @@ import pl.project.investment.investment.entity.Calculation;
  *
  */
 public final class ResultModel {
-	final double amount;
-	final double interest;
-	final int period;
-	final LocalDate date;
-	double profit;
+	private final double amount;
+	private final double interest;
+	private final int period;
+	private final LocalDate date;
+	private double profit;
 	
 	public ResultModel(Calculation calc) {
 		this.amount = calc.getAmount();
@@ -22,7 +22,7 @@ public final class ResultModel {
 		this.profit = calc.getProfit();
 	}
 
-	public ResultModel(double amount, double interest, int period, LocalDate date, double profit) {
+	public ResultModel(double amount, double interest, int period, LocalDate date) {
 		super();
 		this.amount = amount;
 		this.interest = interest;

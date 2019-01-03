@@ -2,6 +2,7 @@ package pl.project.investment.investment.resource;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import pl.project.investment.investment.dao.InvestmentDAO;
 import pl.project.investment.investment.entity.Calculation;
 import pl.project.investment.investment.entity.Investment;
 import pl.project.investment.investment.exception.NotFoundException;
+import pl.project.investment.investment.exception.WrongDataException;
 import pl.project.investment.investment.service.CalculationFactory;
 import pl.project.investment.investment.service.impl.AtTheEndInterest;
 import pl.project.investment.investment.service.impl.DayInterest;
@@ -31,10 +33,15 @@ import pl.project.investment.investment.service.impl.DayInterest;
 @RestController
 public class InvestmentResource {
 
-	@Autowired
 	private InvestmentDAO investmentRepository;
-	@Autowired
 	private CalculationDAO calculationRepository;
+
+	@Autowired
+	public InvestmentResource(InvestmentDAO investmentDAO,
+							  CalculationDAO calculationDAO){
+		this.investmentRepository = investmentDAO;
+		this.calculationRepository = calculationDAO;
+	}
 
 	/**
 	 * 
@@ -62,10 +69,11 @@ public class InvestmentResource {
 	@ResponseBody
 	public ResponseEntity<String> addInvestment(@RequestBody Investment investment) {
 		Investment savedInvestment = investmentRepository.save(investment);
+
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/investments/{id}")
 				.buildAndExpand(savedInvestment.getinvestmentId()).toUri();
 
-		return new ResponseEntity<String>("location" + location, HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>("location" + location, HttpStatus.CREATED);
 	}
 
 	/*
@@ -86,27 +94,32 @@ public class InvestmentResource {
 	public ResponseEntity<String> calculate(@PathVariable int id, @RequestBody JsonModel jsonModel) {
 		Optional<Investment> investmentOptional = investmentRepository.findById(id);
 		if (!investmentOptional.isPresent()) {
-			throw new NotFoundException("id-" + id);
+			throw new NotFoundException("id -" + id);
 		}
-		System.out.println(jsonModel.getAmount() + " " + jsonModel.getName());
 
-		CalculationFactory calculationFactroy = null;
+		CalculationFactory calculationFactory = null;
 		URI location = null;
+	try {
 		if (jsonModel != null) {
 			if (jsonModel.getName().equals("EndAlgorithm")) {
-				calculationFactroy = new CalculationFactory(new AtTheEndInterest(), jsonModel.getAmount());
+				calculationFactory = new CalculationFactory(new AtTheEndInterest(), jsonModel.getAmount());
 			} else if (jsonModel.getName().equals("DayAlgorithm")) {
-				calculationFactroy = new CalculationFactory(new DayInterest(), jsonModel.getAmount());
+				calculationFactory = new CalculationFactory(new DayInterest(), jsonModel.getAmount());
 			}
 
-			Calculation calculation = calculationFactroy.generateCalculation(investmentOptional.get());
+
+			Calculation calculation = Objects.requireNonNull(calculationFactory).generateCalculation(investmentOptional.get());
 
 			calculationRepository.save(calculation);
 
 			location = ServletUriComponentsBuilder.fromCurrentRequest().path("/jpa/{id}")
-					.buildAndExpand(calculation.getId()).toUri();
+				.buildAndExpand(calculation.getId()).toUri();
 		}
-		return new ResponseEntity<String>("" + location, HttpStatus.OK);
+	}catch (WrongDataException ex){
+		throw  new WrongDataException("ex");
+	}
+		return new ResponseEntity<>("" + location, HttpStatus.OK);
+
 	}
 	/**
 	 * 
@@ -115,9 +128,9 @@ public class InvestmentResource {
 	 */
 	@GetMapping("/calculations/{id}")
 	public ResultModel getCalculationById(@PathVariable int id) {
-		Optional<Calculation> calculationOptional = calculationRepository.findById(id);
+		Optional<Calculation> calculationOptional = Optional.ofNullable(calculationRepository.findById(id));
 		if (!calculationOptional.isPresent()) {
-			throw new NotFoundException("id-" + id);
+			throw new NotFoundException("id -" + id);
 		}
 
 		Calculation calc = calculationOptional.get();

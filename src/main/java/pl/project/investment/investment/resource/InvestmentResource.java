@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +25,13 @@ import pl.project.investment.investment.entity.Calculation;
 import pl.project.investment.investment.entity.Investment;
 import pl.project.investment.investment.exception.NotFoundException;
 import pl.project.investment.investment.exception.WrongDataException;
+import pl.project.investment.investment.response.ErrorMessages;
 import pl.project.investment.investment.service.CalculationFactory;
+import pl.project.investment.investment.service.ValidationService;
 import pl.project.investment.investment.service.impl.AtTheEndInterest;
 import pl.project.investment.investment.service.impl.DayInterest;
+import pl.project.investment.investment.service.impl.ValidationServiceImpl;
+
 /**
  * InvestmentResource class with mapping 
  *
@@ -35,6 +41,7 @@ public class InvestmentResource {
 
 	private InvestmentDAO investmentRepository;
 	private CalculationDAO calculationRepository;
+	private ValidationService validationService = new ValidationServiceImpl();
 
 	@Autowired
 	public InvestmentResource(InvestmentDAO investmentDAO,
@@ -91,20 +98,25 @@ public class InvestmentResource {
 	 * 
 	 */
 	@PostMapping("/investments/{id}/calculate")
-	public ResponseEntity<String> calculate(@PathVariable int id, @RequestBody JsonModel jsonModel) {
+	public ResponseEntity<String> calculate(@PathVariable int id, @RequestBody JsonModel jsonModel)
+            throws NotFoundException,WrongDataException {
 		Optional<Investment> investmentOptional = investmentRepository.findById(id);
-		if (!investmentOptional.isPresent()) {
-			throw new NotFoundException("id -" + id);
-		}
+		if (!investmentOptional.isPresent()) throw new NotFoundException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
 		CalculationFactory calculationFactory = null;
 		URI location = null;
-	try {
 		if (jsonModel != null) {
+			if(validationService.isNegative(jsonModel.getAmount()))
+				throw new WrongDataException(ErrorMessages.NEGATIVE_VALUE.getErrorMessage());
+			else if(validationService.isZero(jsonModel.getAmount()))
+				throw new WrongDataException(ErrorMessages.ZERO_VALUE.getErrorMessage());
+
 			if (jsonModel.getName().equals("EndAlgorithm")) {
 				calculationFactory = new CalculationFactory(new AtTheEndInterest(), jsonModel.getAmount());
 			} else if (jsonModel.getName().equals("DayAlgorithm")) {
 				calculationFactory = new CalculationFactory(new DayInterest(), jsonModel.getAmount());
+			} else {
+				throw new NotFoundException(ErrorMessages.NO_ALGORITHM_EXIST.getErrorMessage());
 			}
 
 
@@ -115,9 +127,7 @@ public class InvestmentResource {
 			location = ServletUriComponentsBuilder.fromCurrentRequest().path("/jpa/{id}")
 				.buildAndExpand(calculation.getId()).toUri();
 		}
-	}catch (WrongDataException ex){
-		throw  new WrongDataException("ex");
-	}
+
 		return new ResponseEntity<>("" + location, HttpStatus.OK);
 
 	}

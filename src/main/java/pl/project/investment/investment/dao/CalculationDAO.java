@@ -7,5 +7,6 @@ import pl.project.investment.investment.entity.Calculation;
 
 @Repository
 public interface CalculationDAO extends JpaRepository<Calculation, Integer> {
+    Calculation findById(int id);
 
 }

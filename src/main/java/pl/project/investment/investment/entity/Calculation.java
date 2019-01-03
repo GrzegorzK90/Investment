@@ -90,4 +90,13 @@ public class Calculation {
 				+ investment + ", calculationInterface=" + ", profit=" + profit + "]";
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		Calculation calc = (Calculation) obj;
+		if (this.amount == calc.getAmount()
+			&& this.investment.equals(calc.getInvestment())
+			&& this.profit == calc.getProfit()) {
+		}
+		return true;
+	}
 }

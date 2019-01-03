@@ -94,10 +94,13 @@ public class Investment {
 		return "Investment [id=" + investmentId + ", name=" + name + ", InterestRate=" + InterestRate + ", dateFrom="
 				+ dateFrom + ", dateTo=" + dateTo + ", calculation=" + calculation + "]";
 	}
-	
-	public String toString2() {
-		return "Investment [name=" + name + ", InterestRate=" + InterestRate + ", dateFrom="
-				+ dateFrom + ", dateTo=" + dateTo + "]";
-	}
 
+	@Override
+	public boolean equals(Object obj) {
+		Investment inv = (Investment) obj;
+        return this.InterestRate == inv.getInterestRate()
+                && this.name.equals(inv.getName())
+                && this.dateTo.equals(inv.dateTo)
+                && this.dateFrom.equals(inv.dateFrom);
+	}
 }

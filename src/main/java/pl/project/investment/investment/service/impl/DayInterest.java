@@ -13,19 +13,19 @@ public class DayInterest implements CalculationInterface {
 	public double calculateInterest(int days, double interest, double amount) {
 
 		double percentagePerDay = interest / DAYS_IN_YEAR / (double) 100;
-		double rest = 0.0;
+		double rest;
 		double temp = amount;
-		double result = 0.0;
+		double result;
 		for (int i = 0; i < days; i++) {
 			temp += temp * percentagePerDay;
-			rest = temp % (double) 0.01;
+			rest = temp % 0.01;
 			temp -= rest;
 			if (rest > 0.0049)
 				temp += 0.01;
 		}
 
 		result = temp - amount;
-		rest = (temp - amount) % (double) 0.01;
+		rest = (temp - amount) % 0.01;
 		result -= rest;
 		if (rest > 0.0049)
 			result += 0.01;

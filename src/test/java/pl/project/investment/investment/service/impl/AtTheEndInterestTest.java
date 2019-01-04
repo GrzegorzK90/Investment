@@ -2,11 +2,14 @@ package pl.project.investment.investment.service.impl;
 
 import org.junit.Before;
 import org.junit.Test;
-import pl.project.investment.investment.exception.WrongDataException;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.junit4.SpringRunner;
 import pl.project.investment.investment.service.CalculationInterface;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
+@RunWith(SpringRunner.class)
 public class AtTheEndInterestTest {
 
     private CalculationInterface test;

@@ -20,10 +20,12 @@ public class CalculationFactoryTest {
     private CalculationFactory calculationFactory;
     private Calculation calculation;
 
+
     @Before
     public void init(){
         investment = new Investment(1, "Lokata", 1.0, LocalDate.of(2018, 10, 1), LocalDate.of(2018, 10, 30));
         calculationFactory = null;
+
     }
 
     @Test
@@ -44,8 +46,4 @@ public class CalculationFactoryTest {
 
         assertEquals(calculation.getInvestment(), investment);
     }
-
-
-
-
 }

@@ -1,8 +1,8 @@
 package pl.project.investment.investment.service;
 
+import pl.project.investment.investment.entity.Investment;
+
 public interface ValidationService {
-    boolean isNegative(int value);
-    boolean isNegative(double value);
-    boolean isZero(int value);
-    boolean isZero(double value);
+    void isAmountCorrect(double value);
+    void isInvestmentDateFromToCorrect(Investment investment);
 }

@@ -1,21 +1,9 @@
 package pl.project.investment.investment.resource;
 
-import java.net.URI;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.project.investment.investment.JSON.JsonModel;
 import pl.project.investment.investment.JSON.ResultModel;
@@ -31,6 +19,11 @@ import pl.project.investment.investment.service.ValidationService;
 import pl.project.investment.investment.service.impl.AtTheEndInterest;
 import pl.project.investment.investment.service.impl.DayInterest;
 import pl.project.investment.investment.service.impl.ValidationServiceImpl;
+
+import java.net.URI;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * InvestmentResource class with mapping 
@@ -75,6 +68,8 @@ public class InvestmentResource {
 	@PutMapping("/investments/add")
 	@ResponseBody
 	public ResponseEntity<String> addInvestment(@RequestBody Investment investment) {
+
+		validationService.isInvestmentDateFromToCorrect(investment);
 		Investment savedInvestment = investmentRepository.save(investment);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/investments/{id}")
@@ -103,14 +98,11 @@ public class InvestmentResource {
 		Optional<Investment> investmentOptional = investmentRepository.findById(id);
 		if (!investmentOptional.isPresent()) throw new NotFoundException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
-		CalculationFactory calculationFactory = null;
+		CalculationFactory calculationFactory;
 		URI location = null;
 		if (jsonModel != null) {
-			if(validationService.isNegative(jsonModel.getAmount()))
-				throw new WrongDataException(ErrorMessages.NEGATIVE_VALUE.getErrorMessage());
-			else if(validationService.isZero(jsonModel.getAmount()))
-				throw new WrongDataException(ErrorMessages.ZERO_VALUE.getErrorMessage());
 
+			validationService.isAmountCorrect(jsonModel.getAmount());
 			if (jsonModel.getName().equals("EndAlgorithm")) {
 				calculationFactory = new CalculationFactory(new AtTheEndInterest(), jsonModel.getAmount());
 			} else if (jsonModel.getName().equals("DayAlgorithm")) {

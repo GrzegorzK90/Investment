@@ -1,29 +1,24 @@
 package pl.project.investment.investment.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Objects;
 /**
  * Class with model of Entity Investment
  *
  */
 @Entity
-@SequenceGenerator(name = "INV_SEQ", sequenceName = "investment_sequence")
+@SequenceGenerator(name = "INV_SEQ", allocationSize = 1)
 public class Investment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "INV_SEQ")
 	private int investmentId;
 
 	private String name;
-	private double InterestRate;
+	private double interestRate;
 	private LocalDate dateFrom;
 	private LocalDate dateTo;
 
@@ -38,14 +33,14 @@ public class Investment {
 		super();
 		this.investmentId = investmentId;
 		this.name = name;
-		InterestRate = interestRate;
+		this.interestRate = interestRate;
 		this.dateFrom = dateFrom;
 		this.dateTo = dateTo;
 	}
 	public Investment( String name, double interestRate, LocalDate dateFrom, LocalDate dateTo) {
 		super();
 		this.name = name;
-		InterestRate = interestRate;
+		this.interestRate = interestRate;
 		this.dateFrom = dateFrom;
 		this.dateTo = dateTo;
 	}
@@ -66,11 +61,11 @@ public class Investment {
 	}
 
 	public double getInterestRate() {
-		return InterestRate;
+		return interestRate;
 	}
 
 	public void setInterestRate(double interestRate) {
-		InterestRate = interestRate;
+		this.interestRate = interestRate;
 	}
 
 	public LocalDate getDateFrom() {
@@ -91,16 +86,23 @@ public class Investment {
 
 	@Override
 	public String toString() {
-		return "Investment [id=" + investmentId + ", name=" + name + ", InterestRate=" + InterestRate + ", dateFrom="
+		return "Investment [id=" + investmentId + ", name=" + name + ", interestRate=" + interestRate + ", dateFrom="
 				+ dateFrom + ", dateTo=" + dateTo + ", calculation=" + calculation + "]";
 	}
 
 	@Override
 	public boolean equals(Object obj) {
+		if(obj == this) return true;
+		if (!(obj instanceof Investment)){
+			return false;
+		}
+
 		Investment inv = (Investment) obj;
-        return this.InterestRate == inv.getInterestRate()
-                && this.name.equals(inv.getName())
-                && this.dateTo.equals(inv.dateTo)
-                && this.dateFrom.equals(inv.dateFrom);
+
+		return investmentId == inv.investmentId &&
+				interestRate == inv.interestRate &&
+				Objects.equals(name,inv.name) &&
+				Objects.equals(dateFrom,inv.dateFrom) &&
+				Objects.equals(dateTo,inv.dateTo);
 	}
 }

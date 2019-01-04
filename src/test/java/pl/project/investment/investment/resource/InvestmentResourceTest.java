@@ -1,11 +1,8 @@
 package pl.project.investment.investment.resource;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -29,21 +26,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = InvestmentResource.class)
-@AutoConfigureMockMvc(secure = false)
+@WebMvcTest(InvestmentResource.class)
 public class InvestmentResourceTest {
 
     @Autowired
     private MockMvc mockMvc;
+
     @MockBean
     private CalculationDAO calculationDAO;
     @MockBean
     private InvestmentDAO investmentDAO;
 
-    @Before
-    public void init() {
-        MockitoAnnotations.initMocks(this);
-    }
 
     @Test
     public void testGettingAllInvestment() throws Exception {
@@ -139,6 +132,7 @@ public class InvestmentResourceTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"Lokata\",\"dateFrom\":\"2018-10-29\",\"dateTo\":\"2018-10-30\",\"interestRate\":\"Do\"}"))
                 .andExpect(jsonPath("@.message", is(ErrorMessages.CONVERSION_TYPE_ERROR.getErrorMessage())))
+
                 .andExpect(status().isBadRequest());
     }
 
@@ -201,7 +195,7 @@ public class InvestmentResourceTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"DayAlgorithm\", \"amount\": \"0.00\"}"))
-                .andExpect(jsonPath("@.message", is("Found 0.00 in amount field")))
+                .andExpect(jsonPath("@.message", is(ErrorMessages.ZERO_VALUE.getErrorMessage())))
                 .andExpect(status().isBadRequest());
     }
 
@@ -216,7 +210,7 @@ public class InvestmentResourceTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"DayAlgorithm\", \"amount\": \"-20.00\"}"))
-                .andExpect(jsonPath("@.message", is("Value is negative")))
+                .andExpect(jsonPath("@.message", is(ErrorMessages.NEGATIVE_VALUE.getErrorMessage())))
                 .andExpect(status().isBadRequest());
     }
 
@@ -253,7 +247,5 @@ public class InvestmentResourceTest {
         mockMvc.perform(put("/investments/add"))
                 .andExpect(status().isBadRequest());
     }
-
-
 
 }

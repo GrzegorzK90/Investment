@@ -3,9 +3,8 @@ package pl.project.investment.investment.service.impl;
 import pl.project.investment.investment.service.CalculationInterface;
 
 /**
- * Class implementing CalculationInteface 
- * used to calculate profit for each day 
- *
+ * Class implementing CalculationInterface
+ * used to calculate profit for each day
  */
 public class DayInterest implements CalculationInterface {
 
@@ -24,6 +23,7 @@ public class DayInterest implements CalculationInterface {
 				temp += 0.01;
 		}
 
+
 		result = temp - amount;
 		rest = (temp - amount) % 0.01;
 		result -= rest;
@@ -32,4 +32,5 @@ public class DayInterest implements CalculationInterface {
 
 		return result;
 	}
+
 }

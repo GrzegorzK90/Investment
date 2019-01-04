@@ -132,7 +132,7 @@ public class InvestmentResource {
 	public ResultModel getCalculationById(@PathVariable int id) {
 		Optional<Calculation> calculationOptional = Optional.ofNullable(calculationRepository.findById(id));
 		if (!calculationOptional.isPresent()) {
-			throw new NotFoundException("id -" + id);
+			throw new NotFoundException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage() + " "+ id);
 		}
 
 		Calculation calc = calculationOptional.get();

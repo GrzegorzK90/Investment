@@ -1,12 +1,8 @@
 package pl.project.investment.investment.entity;
 
+import javax.persistence.*;
 import java.time.LocalDate;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
+import java.util.Objects;
 
 /**
  * Entity class with object Calculation
@@ -14,7 +10,7 @@ import javax.persistence.SequenceGenerator;
  *
  */
 @Entity
-@SequenceGenerator(name = "CAL_SEQ", sequenceName = "calculation_sequence")
+@SequenceGenerator(name = "CAL_SEQ", allocationSize = 1)
 public class Calculation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CAL_SEQ")
@@ -92,11 +88,19 @@ public class Calculation {
 
 	@Override
 	public boolean equals(Object obj) {
-		Calculation calc = (Calculation) obj;
-		if (this.amount == calc.getAmount()
-			&& this.investment.equals(calc.getInvestment())
-			&& this.profit == calc.getProfit()) {
+
+		if(obj == this) return true;
+		if (!(obj instanceof Calculation)){
+			return false;
 		}
-		return true;
+
+		Calculation calc = (Calculation) obj;
+
+		return id == calc.id &&
+				amount == calc.amount &&
+				profit == calc.profit &&
+				Objects.equals(investment,calc.investment) &&
+				Objects.equals(calculationDate,calc.calculationDate);
+
 	}
 }

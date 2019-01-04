@@ -3,7 +3,7 @@ package pl.project.investment.investment.response;
 public enum ErrorMessages {
         ZERO_VALUE("Found 0.00 in amount field"),
         NEGATIVE_VALUE("Value is negative"),
-        NO_RECORD_FOUND("This id don't exist in database"),
+        NO_RECORD_FOUND("don't exist in database id "),
         NO_ALGORITHM_EXIST("Algorithm don't exist"),
         CONVERSION_TYPE_ERROR("Wrong type in request body"),
         ZERO_DAY("Investment is for 0 day error"),

@@ -40,8 +40,6 @@ public class DayInterestTest {
     @Test
     public void testWrongValue(){
         assertNotEquals(1004.96, test.calculateInterest(91, 4, 100000),delta);
-        assertNotEquals(1004.96, test.calculateInterest(360, 2.5, 999),delta);
-
     }
 
     @Test

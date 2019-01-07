@@ -1,7 +1,9 @@
 package pl.project.investment.investment.JSON;
 
-import java.time.LocalDate;
 import pl.project.investment.investment.entity.Calculation;
+
+import java.time.LocalDate;
+import java.util.Objects;
 /**
  * Class creating result from object Calculation
  *
@@ -12,7 +14,10 @@ public final class ResultModel {
 	private final int period;
 	private final LocalDate date;
 	private double profit;
-	
+	private int calculationId;
+
+
+
 	public ResultModel(Calculation calc) {
 		this.amount = calc.getAmount();
 		this.interest = calc.getInvestment().getInterestRate();
@@ -20,6 +25,7 @@ public final class ResultModel {
 				- calc.getInvestment().getDateFrom().getDayOfYear();
 		this.date = calc.getCalculationDate();
 		this.profit = calc.getProfit();
+		this.calculationId = calc.getId();
 	}
 
 	public ResultModel(double amount, double interest, int period, LocalDate date) {
@@ -28,6 +34,16 @@ public final class ResultModel {
 		this.interest = interest;
 		this.period = period;
 		this.date = date;
+	}
+
+	//For Test Constructor
+	public ResultModel(double amount, double interest, int period, LocalDate date, double profit) {
+		super();
+		this.amount = amount;
+		this.interest = interest;
+		this.period = period;
+		this.date = date;
+		this.profit = profit;
 	}
 
 	public double getAmount() {
@@ -46,11 +62,41 @@ public final class ResultModel {
 		return date;
 	}
 
-	@Override
-	public String toString() {
-		return "ResultModel [amount=" + amount + ", interest=" + interest + ", period=" + period + ", date=" + date
-				+ ", profit=" + profit + "]";
+	public double getProfit() {
+		return profit;
 	}
 
+	public void setProfit(double profit) {
+		this.profit = profit;
+	}
 
+	public int getCalculationId() {
+		return calculationId;
+	}
+
+	public void setCalculationId(int calculationId) {
+		this.calculationId = calculationId;
+	}
+
+	@Override
+	public String toString() {
+		return "amount=" + amount + ", interest=" + interest + ", period=" + period + ", date=" + date
+				+ ", profit=" + profit;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == this) return true;
+		if (!(obj instanceof ResultModel)){
+			return false;
+		}
+
+		ResultModel rm = (ResultModel) obj;
+
+		return amount == rm.amount &&
+				interest == rm.interest &&
+				period == rm.period &&
+				profit == rm.profit &&
+				Objects.equals(date,rm.date);
+	}
 }

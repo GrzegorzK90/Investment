@@ -1,11 +1,13 @@
 package pl.project.investment.investment.service.impl;
 
 
+import org.springframework.stereotype.Service;
 import pl.project.investment.investment.entity.Investment;
 import pl.project.investment.investment.exception.WrongDataException;
 import pl.project.investment.investment.response.ErrorMessages;
 import pl.project.investment.investment.service.ValidationService;
 
+@Service
 public class ValidationServiceImpl implements ValidationService {
 
     private boolean isNegative(int value){

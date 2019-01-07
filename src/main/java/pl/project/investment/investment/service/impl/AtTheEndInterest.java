@@ -1,4 +1,5 @@
 package pl.project.investment.investment.service.impl;
+import pl.project.investment.investment.Type;
 import pl.project.investment.investment.service.CalculationInterface;
 
 import java.math.BigDecimal;
@@ -12,6 +13,8 @@ import java.math.RoundingMode;
  */
 public class AtTheEndInterest implements CalculationInterface {
 
+	public Type name = Type.EndAlgorithm;
+
 	@Override
 	public double calculateInterest(int days, double interest, double amount) {
 
@@ -23,4 +26,8 @@ public class AtTheEndInterest implements CalculationInterface {
 		return bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
 	}
 
+	@Override
+	public String getType() {
+		return name.toString();
+	}
 }

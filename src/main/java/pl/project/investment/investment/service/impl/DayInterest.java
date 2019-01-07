@@ -1,5 +1,6 @@
 package pl.project.investment.investment.service.impl;
 
+import pl.project.investment.investment.Type;
 import pl.project.investment.investment.service.CalculationInterface;
 
 /**
@@ -7,6 +8,8 @@ import pl.project.investment.investment.service.CalculationInterface;
  * used to calculate profit for each day
  */
 public class DayInterest implements CalculationInterface {
+
+	public Type name = Type.DayAlgorithm;
 
 	@Override
 	public double calculateInterest(int days, double interest, double amount) {
@@ -33,4 +36,8 @@ public class DayInterest implements CalculationInterface {
 		return result;
 	}
 
+	@Override
+	public String getType() {
+		return name.toString();
+	}
 }

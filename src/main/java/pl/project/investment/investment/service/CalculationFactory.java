@@ -1,31 +1,29 @@
 package pl.project.investment.investment.service;
 
-import pl.project.investment.investment.entity.Calculation;
-import pl.project.investment.investment.entity.Investment;
-import pl.project.investment.investment.exception.WrongDataException;
-
-import java.time.LocalDate;
-
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CalculationFactory {
 
-	private CalculationInterface calculationInterface;
-	private double amount;
+	private static Map<String,Object> calculationInterfaceMap = new HashMap<>();
 
-	public CalculationFactory(CalculationInterface calculationInterface, double amount) {
-			this.amount = amount;
-			this.calculationInterface = calculationInterface;
+	private static CalculationFactory instance = null;
+
+	public static CalculationFactory getInstance(List<CalculationInterface> list){
+		if(instance==null)
+			instance = new CalculationFactory(list);
+		return instance;
 	}
 
-	public Calculation generateCalculation(Investment investment) throws WrongDataException {
+	private CalculationFactory(List<CalculationInterface> list){
+		for (CalculationInterface calInterface: list  ) {
+			calculationInterfaceMap.put(calInterface.getType(),calInterface);
+		}
+	}
 
-		int days = investment.getDateTo().getDayOfYear() - investment.getDateFrom().getDayOfYear();
-		double interestRate = investment.getInterestRate();
-		LocalDate today = LocalDate.now();
-
-		double profit = calculationInterface.calculateInterest(days, interestRate, amount);
-
-		return new Calculation(days, amount, today, investment, profit);
+	public Object getInterface(String name){
+		return calculationInterfaceMap.get(name);
 	}
 
 }

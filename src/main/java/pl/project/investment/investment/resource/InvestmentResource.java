@@ -1,29 +1,18 @@
 package pl.project.investment.investment.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.project.investment.investment.JSON.JsonModel;
 import pl.project.investment.investment.JSON.ResultModel;
-import pl.project.investment.investment.dao.CalculationDAO;
-import pl.project.investment.investment.dao.InvestmentDAO;
-import pl.project.investment.investment.entity.Calculation;
 import pl.project.investment.investment.entity.Investment;
-import pl.project.investment.investment.exception.NotFoundException;
-import pl.project.investment.investment.exception.WrongDataException;
-import pl.project.investment.investment.response.ErrorMessages;
-import pl.project.investment.investment.service.CalculationFactory;
-import pl.project.investment.investment.service.ValidationService;
-import pl.project.investment.investment.service.impl.AtTheEndInterest;
-import pl.project.investment.investment.service.impl.DayInterest;
-import pl.project.investment.investment.service.impl.ValidationServiceImpl;
+import pl.project.investment.investment.response.ResponseHeader;
+import pl.project.investment.investment.service.CalculationService;
+import pl.project.investment.investment.service.InvestmentService;
 
-import java.net.URI;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 /**
  * InvestmentResource class with mapping 
@@ -32,15 +21,17 @@ import java.util.Optional;
 @RestController
 public class InvestmentResource {
 
-	private InvestmentDAO investmentRepository;
-	private CalculationDAO calculationRepository;
-	private ValidationService validationService = new ValidationServiceImpl();
+	private CalculationService calculationService;
+	private InvestmentService investmentService;
+	private ResponseHeader responseHeader = new ResponseHeader();
 
+	@Lazy
 	@Autowired
-	public InvestmentResource(InvestmentDAO investmentDAO,
-							  CalculationDAO calculationDAO){
-		this.investmentRepository = investmentDAO;
-		this.calculationRepository = calculationDAO;
+	public InvestmentResource(
+							  CalculationService calculationService,
+							  InvestmentService investmentService){
+		this.calculationService = calculationService;
+		this.investmentService = investmentService;
 	}
 
 	/**
@@ -49,78 +40,34 @@ public class InvestmentResource {
 	 */
 	@GetMapping("/investments")
 	public List<Investment> retriveAllInvestment() {
-		return investmentRepository.findAll();
+
+		return investmentService.getAllInvestment();
 	}
 
-	/*
-	 * 
-	 * Put method 
-	 * Example JSON
-	 *  {
-     *   "name": "Lokata",
-     *   "dateFrom": "2018-10-01",
-     *   "dateTo": "2018-11-01",
-     *   "interestRate": 4
-     *	}
-     *
-	 * 
-	 */
+
 	@PutMapping("/investments/add")
 	@ResponseBody
 	public ResponseEntity<String> addInvestment(@RequestBody Investment investment) {
 
-		validationService.isInvestmentDateFromToCorrect(investment);
-		Investment savedInvestment = investmentRepository.save(investment);
 
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/investments/{id}")
-				.buildAndExpand(savedInvestment.getinvestmentId()).toUri();
 
-		return new ResponseEntity<>("location" + location, HttpStatus.CREATED);
+		int id = investmentService.save(investment);
+
+
+
+		return new ResponseEntity<>("",responseHeader.getHeader("/investments/{id}",id), HttpStatus.CREATED);
 	}
 
-	/*
-	 * 
-	 * Post method 
-	 * in name insert - "EndAlgorithm" for Calculation at the end of investment period
-	 * "DayAlgorithm" for Algorithm calculating interest each day
-	 * 
-	 * Example JSON insert 
-	 *  {
-     *   "name": "EndAlgorithm",
-     *   "amount": 400.10
-     *	}
-     *
-	 * 
-	 */
+
 	@PostMapping("/investments/{id}/calculate")
-	public ResponseEntity<String> calculate(@PathVariable int id, @RequestBody JsonModel jsonModel)
-            throws NotFoundException,WrongDataException {
-		Optional<Investment> investmentOptional = investmentRepository.findById(id);
-		if (!investmentOptional.isPresent()) throw new NotFoundException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-
-		CalculationFactory calculationFactory;
-		URI location = null;
-		if (jsonModel != null) {
-
-			validationService.isAmountCorrect(jsonModel.getAmount());
-			if (jsonModel.getName().equals("EndAlgorithm")) {
-				calculationFactory = new CalculationFactory(new AtTheEndInterest(), jsonModel.getAmount());
-			} else if (jsonModel.getName().equals("DayAlgorithm")) {
-				calculationFactory = new CalculationFactory(new DayInterest(), jsonModel.getAmount());
-			} else {
-				throw new NotFoundException(ErrorMessages.NO_ALGORITHM_EXIST.getErrorMessage());
-			}
+	public ResponseEntity<String> calculate(@PathVariable int id, @RequestBody JsonModel jsonModel) {
 
 
-			Calculation calculation = Objects.requireNonNull(calculationFactory).generateCalculation(investmentOptional.get());
+		ResultModel rm = calculationService.doCalculation(id ,jsonModel);
 
-			calculationRepository.save(calculation);
 
-			location = ServletUriComponentsBuilder.fromCurrentRequest().path("/jpa/{id}")
-				.buildAndExpand(calculation.getId()).toUri();
-		}
-
-		return new ResponseEntity<>("" + location, HttpStatus.OK);
+		return new ResponseEntity<>(rm.toString(),
+				responseHeader.getHeader("/calculations/{id}",rm.getCalculationId()), HttpStatus.OK);
 
 	}
 	/**
@@ -130,15 +77,7 @@ public class InvestmentResource {
 	 */
 	@GetMapping("/calculations/{id}")
 	public ResultModel getCalculationById(@PathVariable int id) {
-		Optional<Calculation> calculationOptional = Optional.ofNullable(calculationRepository.findById(id));
-		if (!calculationOptional.isPresent()) {
-			throw new NotFoundException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage() + " "+ id);
-		}
-
-		Calculation calc = calculationOptional.get();
-		ResultModel rm = new ResultModel(calc);
-		System.out.println(rm.getAmount());
-		return rm;
+		return calculationService.getCalculationById(id);
 	}
 
 }

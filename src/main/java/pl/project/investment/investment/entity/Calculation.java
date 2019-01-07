@@ -6,8 +6,6 @@ import java.util.Objects;
 
 /**
  * Entity class with object Calculation
- *
- *
  */
 @Entity
 @SequenceGenerator(name = "CAL_SEQ", allocationSize = 1)

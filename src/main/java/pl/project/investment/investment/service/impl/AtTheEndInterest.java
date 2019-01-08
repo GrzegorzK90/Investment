@@ -1,5 +1,6 @@
 package pl.project.investment.investment.service.impl;
-import pl.project.investment.investment.Type;
+import org.springframework.stereotype.Component;
+import pl.project.investment.investment.enums.TypeImplementation;
 import pl.project.investment.investment.service.CalculationInterface;
 
 import java.math.BigDecimal;
@@ -11,9 +12,10 @@ import java.math.RoundingMode;
  * @author Kuliński 
  *
  */
+@Component
 public class AtTheEndInterest implements CalculationInterface {
 
-	public Type name = Type.EndAlgorithm;
+	private TypeImplementation type = TypeImplementation.DayAlgorithm;
 
 	@Override
 	public double calculateInterest(int days, double interest, double amount) {
@@ -27,7 +29,7 @@ public class AtTheEndInterest implements CalculationInterface {
 	}
 
 	@Override
-	public String getType() {
-		return name.toString();
+	public TypeImplementation getType() {
+		return type;
 	}
 }

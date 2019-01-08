@@ -13,7 +13,10 @@ import pl.project.investment.investment.dao.CalculationDAO;
 import pl.project.investment.investment.dao.InvestmentDAO;
 import pl.project.investment.investment.entity.Calculation;
 import pl.project.investment.investment.entity.Investment;
+import pl.project.investment.investment.enums.TypeImplementation;
 import pl.project.investment.investment.exception.NotFoundException;
+import pl.project.investment.investment.service.impl.AtTheEndInterest;
+import pl.project.investment.investment.service.impl.DayInterest;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -22,11 +25,10 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(CalculationService.class)
+@WebMvcTest({CalculationService.class, AtTheEndInterest.class, DayInterest.class,ValidationService.class, CalculationFactory.class})
+
+
 public class CalculationServiceTest {
-
-
-
 
     private Investment investment;
     private Calculation calculation;
@@ -66,8 +68,8 @@ public class CalculationServiceTest {
     public void doCalculation() {
 
         ResultModel rm = new ResultModel(100,4.0,29,
-                LocalDate.of(2019,01,07),0.29);
-        JsonModel jsonModel = new JsonModel("DayAlgorithm",100.0);
+                LocalDate.now(),0.29);
+        JsonModel jsonModel = new JsonModel(TypeImplementation.EndAlgorithm,100.0);
         when(investmentDAO.findById(1)).thenReturn(Optional.ofNullable(investment));
         ResultModel resultModel = calculationService.doCalculation(1 ,jsonModel);
         System.out.println(resultModel);

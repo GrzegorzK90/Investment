@@ -1,5 +1,6 @@
 package pl.project.investment.investment.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.project.investment.investment.JSON.JsonModel;
 import pl.project.investment.investment.JSON.ResultModel;
@@ -7,37 +8,31 @@ import pl.project.investment.investment.dao.CalculationDAO;
 import pl.project.investment.investment.dao.InvestmentDAO;
 import pl.project.investment.investment.entity.Calculation;
 import pl.project.investment.investment.entity.Investment;
+import pl.project.investment.investment.enums.ErrorMessages;
 import pl.project.investment.investment.exception.NotFoundException;
 import pl.project.investment.investment.exception.WrongDataException;
-import pl.project.investment.investment.response.ErrorMessages;
-import pl.project.investment.investment.service.impl.AtTheEndInterest;
-import pl.project.investment.investment.service.impl.DayInterest;
-import pl.project.investment.investment.service.impl.ValidationServiceImpl;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class CalculationService {
 
-
     private CalculationDAO calculationDAO;
-
     private InvestmentDAO investmentDAO;
-
     private ValidationService validationService;
+    private CalculationFactory calculationFactory;
+
 
     private double amount;
 
-    CalculationService(CalculationDAO calculationDAO, InvestmentDAO investmentDAO){
+    @Autowired
+    CalculationService(CalculationDAO calculationDAO, InvestmentDAO investmentDAO, ValidationService validationService,CalculationFactory calculationFactory){
         this.calculationDAO = calculationDAO;
         this.investmentDAO = investmentDAO;
-        validationService = new ValidationServiceImpl();
+        this.validationService = validationService;
+        this.calculationFactory = calculationFactory;
     }
-
 
     public ResultModel doCalculation(int id, JsonModel jsonModel) {
 
@@ -46,27 +41,17 @@ public class CalculationService {
             throw new NotFoundException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
         if (jsonModel != null) {
-
             validationService.isAmountCorrect(this.amount = jsonModel.getAmount());
-
-            //WOW
-
-            List<CalculationInterface> list = new ArrayList<>();
-
-            list.add(new AtTheEndInterest());
-            list.add(new DayInterest());
-
-            Calculation calculation  = generateCalculation(
-                    (CalculationInterface) CalculationFactory.getInstance(list).getInterface(jsonModel.getName()),
-                    Objects.requireNonNull(investmentOptional.get()));
-
+            Calculation calculation  = generateCalculation(calculationFactory.
+                    getInterface(jsonModel.getName()), investmentOptional.get());
             calculationDAO.save(calculation);
 
             return new ResultModel(calculation);
-
         }
+
         return null;
     }
+
 
         private Calculation generateCalculation(CalculationInterface calculationInterface, Investment investment)
                 throws WrongDataException
@@ -74,7 +59,6 @@ public class CalculationService {
             int days = investment.getDateTo().getDayOfYear() - investment.getDateFrom().getDayOfYear();
             double interestRate = investment.getInterestRate();
             LocalDate today = LocalDate.now();
-
             double profit = calculationInterface.calculateInterest(days, interestRate, amount);
 
             return new Calculation(days, amount, today, investment, profit);
@@ -86,7 +70,6 @@ public class CalculationService {
         if(!calculationOptional.isPresent()){
             throw new NotFoundException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage() + " " + id);
         }
-
         return new ResultModel(calculationOptional.get());
     }
 }

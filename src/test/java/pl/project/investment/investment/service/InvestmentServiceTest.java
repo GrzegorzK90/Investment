@@ -2,8 +2,9 @@ package pl.project.investment.investment.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.project.investment.investment.dao.InvestmentDAO;
@@ -14,10 +15,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(InvestmentService.class)
+//@WebMvcTest({InvestmentService.class,ValidationService.class})
+@SpringBootTest(classes = {CalculationService.class, ValidationService.class})
 public class InvestmentServiceTest {
 
 
@@ -47,7 +48,7 @@ public class InvestmentServiceTest {
                         10,
                         30));
 
-        when(investmentDAO.save(investment)).thenReturn(savedInvestment);
+        Mockito.when(investmentDAO.save(investment)).thenReturn(savedInvestment);
 
         assertEquals(1,investmentService.save(investment));
 
@@ -61,13 +62,10 @@ public class InvestmentServiceTest {
                 new Investment(2, "Test", 4.0, LocalDate.of(2018, 10, 1),
                         LocalDate.of(2018, 10, 30))
         );
-
-
-        when(investmentDAO.findAll()).thenReturn(investments);
+        Mockito.when(investmentDAO.findAll()).thenReturn(investments);
 
         List<Investment> testList = investmentService.getAllInvestment();
 
         assertEquals(investments.get(0).getName(),testList.get(0).getName());
-
     }
 }

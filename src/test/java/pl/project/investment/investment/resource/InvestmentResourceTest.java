@@ -8,13 +8,18 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
 import pl.project.investment.investment.dao.CalculationDAO;
 import pl.project.investment.investment.dao.InvestmentDAO;
 import pl.project.investment.investment.entity.Calculation;
 import pl.project.investment.investment.entity.Investment;
-import pl.project.investment.investment.response.ErrorMessages;
+import pl.project.investment.investment.enums.ErrorMessages;
+import pl.project.investment.investment.service.CalculationFactory;
 import pl.project.investment.investment.service.CalculationService;
 import pl.project.investment.investment.service.InvestmentService;
+import pl.project.investment.investment.service.ValidationService;
+import pl.project.investment.investment.service.impl.AtTheEndInterest;
+import pl.project.investment.investment.service.impl.DayInterest;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -29,7 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @RunWith(SpringRunner.class)
-@WebMvcTest({InvestmentResource.class,InvestmentService.class,CalculationService.class})
+@WebMvcTest({InvestmentResource.class, ValidationService.class,InvestmentService.class,CalculationService.class,
+       CalculationFactory.class, AtTheEndInterest.class, DayInterest.class})
 public class InvestmentResourceTest {
 
     @Autowired
@@ -40,6 +46,8 @@ public class InvestmentResourceTest {
     @MockBean
     private InvestmentDAO investmentDAO;
 
+    @Autowired
+    private WebApplicationContext webApplicationContext;
 
     @Test
     public void testGettingAllInvestment() throws Exception {
@@ -50,7 +58,7 @@ public class InvestmentResourceTest {
                         LocalDate.of(2018, 10, 30))
         );
         when(investmentDAO.findAll()).thenReturn(investments);
-        mockMvc.perform(get("/investments"))
+        this.mockMvc.perform(get("/investments"))
                 .andExpect(jsonPath("$[1].name", is("Test")))
                 .andExpect(jsonPath("$[0].investmentId", is(1)));
     }

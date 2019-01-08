@@ -7,8 +7,8 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import pl.project.investment.investment.enums.ErrorMessages;
 import pl.project.investment.investment.response.ErrorMessage;
-import pl.project.investment.investment.response.ErrorMessages;
 
 import java.util.Date;
 

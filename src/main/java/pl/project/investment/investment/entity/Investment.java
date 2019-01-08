@@ -44,6 +44,7 @@ public class Investment {
 		this.dateFrom = dateFrom;
 		this.dateTo = dateTo;
 	}
+
 	public int getinvestmentId() {
 		return investmentId;
 	}

@@ -9,6 +9,7 @@ import pl.project.investment.investment.service.CalculationInterface;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+
 @RunWith(SpringRunner.class)
 public class DayInterestTest {
 

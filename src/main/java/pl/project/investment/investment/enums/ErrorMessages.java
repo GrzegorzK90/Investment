@@ -1,4 +1,4 @@
-package pl.project.investment.investment.response;
+package pl.project.investment.investment.enums;
 
 public enum ErrorMessages {
         ZERO_VALUE("Found 0.00 in amount field"),

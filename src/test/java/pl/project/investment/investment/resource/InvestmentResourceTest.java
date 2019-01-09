@@ -3,7 +3,8 @@ package pl.project.investment.investment.resource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -12,9 +13,7 @@ import pl.project.investment.investment.dao.CalculationDAO;
 import pl.project.investment.investment.dao.InvestmentDAO;
 import pl.project.investment.investment.entity.Calculation;
 import pl.project.investment.investment.entity.Investment;
-import pl.project.investment.investment.response.ErrorMessages;
-import pl.project.investment.investment.service.CalculationService;
-import pl.project.investment.investment.service.InvestmentService;
+import pl.project.investment.investment.enums.ErrorMessages;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -29,7 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @RunWith(SpringRunner.class)
-@WebMvcTest({InvestmentResource.class,InvestmentService.class,CalculationService.class})
+@SpringBootTest
+@AutoConfigureMockMvc
 public class InvestmentResourceTest {
 
     @Autowired
@@ -40,7 +40,6 @@ public class InvestmentResourceTest {
     @MockBean
     private InvestmentDAO investmentDAO;
 
-
     @Test
     public void testGettingAllInvestment() throws Exception {
         List<Investment> investments = Arrays.asList(
@@ -50,7 +49,7 @@ public class InvestmentResourceTest {
                         LocalDate.of(2018, 10, 30))
         );
         when(investmentDAO.findAll()).thenReturn(investments);
-        mockMvc.perform(get("/investments"))
+        this.mockMvc.perform(get("/investments"))
                 .andExpect(jsonPath("$[1].name", is("Test")))
                 .andExpect(jsonPath("$[0].investmentId", is(1)));
     }
@@ -183,8 +182,7 @@ public class InvestmentResourceTest {
         Calculation cal = new Calculation(1, 1000.00, LocalDate.now(), inv, 3.33);
 
         when(calculationDAO.findById(1)).thenReturn(Optional.ofNullable(cal));
-
-        //when(calculationService.getCalculationById(1)).thenReturn(new ResultModel(cal));
+        
         mockMvc.perform(get("/calculations/{id}", 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("@.amount", is(1000.0)))

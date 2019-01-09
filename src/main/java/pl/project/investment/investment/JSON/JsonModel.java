@@ -1,19 +1,22 @@
 package pl.project.investment.investment.JSON;
+
+import pl.project.investment.investment.enums.TypeImplementation;
+
 /**
  * Class used to get parameters from user to generate calculation
  */
 public  class JsonModel {
-	 private String name;
+	 private TypeImplementation name;
 	 private double amount;
 
-	public JsonModel(String name, double amount) {
+	public JsonModel(TypeImplementation name, double amount) {
 		this.name = name;
 		this.amount = amount;
 	}
 
 	public JsonModel(){}
 
-	public String getName() {
+	public TypeImplementation getName() {
 		return name;
 	}
 
@@ -21,7 +24,7 @@ public  class JsonModel {
 		return amount;
 	}
 
-	public void setName(String name) {
+	public void Type(TypeImplementation name) {
 		this.name = name;
 	}
 

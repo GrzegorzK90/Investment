@@ -1,15 +1,19 @@
 package pl.project.investment.investment.service.impl;
 
-import pl.project.investment.investment.Type;
+import org.springframework.stereotype.Component;
+import pl.project.investment.investment.enums.TypeImplementation;
 import pl.project.investment.investment.service.CalculationInterface;
 
 /**
  * Class implementing CalculationInterface
  * used to calculate profit for each day
  */
+@Component
 public class DayInterest implements CalculationInterface {
 
-	public Type name = Type.DayAlgorithm;
+	//public TypeImplementation name = TypeImplementation.DayAlgorithm;
+
+	private TypeImplementation type = TypeImplementation.EndAlgorithm;
 
 	@Override
 	public double calculateInterest(int days, double interest, double amount) {
@@ -37,7 +41,7 @@ public class DayInterest implements CalculationInterface {
 	}
 
 	@Override
-	public String getType() {
-		return name.toString();
+	public TypeImplementation getType() {
+		return type;
 	}
 }

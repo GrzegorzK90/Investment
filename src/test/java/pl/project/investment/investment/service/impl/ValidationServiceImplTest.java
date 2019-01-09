@@ -11,7 +11,10 @@ import pl.project.investment.investment.service.ValidationService;
 import java.time.LocalDate;
 
 @RunWith(SpringRunner.class)
+
 public class ValidationServiceImplTest {
+
+
 
     private ValidationService validationService;
 

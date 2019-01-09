@@ -39,36 +39,27 @@ public class InvestmentResource {
 	 * @return InvestmentRepository List with all investment 
 	 */
 	@GetMapping("/investments")
-	public List<Investment> retriveAllInvestment() {
+	public List<Investment> retrieveAllInvestment() {
 
 		return investmentService.getAllInvestment();
 	}
-
-
+	
 	@PutMapping("/investments/add")
 	@ResponseBody
 	public ResponseEntity<String> addInvestment(@RequestBody Investment investment) {
 
-
-
 		int id = investmentService.save(investment);
-
-
 
 		return new ResponseEntity<>("",responseHeader.getHeader("/investments/{id}",id), HttpStatus.CREATED);
 	}
 
-
 	@PostMapping("/investments/{id}/calculate")
 	public ResponseEntity<String> calculate(@PathVariable int id, @RequestBody JsonModel jsonModel) {
 
-
 		ResultModel rm = calculationService.doCalculation(id ,jsonModel);
-
 
 		return new ResponseEntity<>(rm.toString(),
 				responseHeader.getHeader("/calculations/{id}",rm.getCalculationId()), HttpStatus.OK);
-
 	}
 	/**
 	 * 

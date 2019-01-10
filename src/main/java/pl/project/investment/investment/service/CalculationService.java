@@ -15,45 +15,39 @@ import pl.project.investment.investment.exception.WrongDataException;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 @Service
 public class CalculationService {
 
     private CalculationDAO calculationDAO;
     private InvestmentDAO investmentDAO;
-    private ValidationService validationService;
     private CalculationFactory calculationFactory;
 
 
-    private double amount;
-
     @Autowired
-    CalculationService(CalculationDAO calculationDAO, InvestmentDAO investmentDAO, ValidationService validationService,CalculationFactory calculationFactory){
+    public CalculationService(CalculationDAO calculationDAO, InvestmentDAO investmentDAO,
+                               CalculationFactory calculationFactory){
         this.calculationDAO = calculationDAO;
         this.investmentDAO = investmentDAO;
-        this.validationService = validationService;
         this.calculationFactory = calculationFactory;
     }
 
     public ResultModel doCalculation(int id, JsonModel jsonModel) {
+        checkArgument(jsonModel != null,ErrorMessages.WRONG_REQUEST_BODY);
 
         Optional<Investment> investmentOptional = investmentDAO.findById(id);
         if (!investmentOptional.isPresent())
             throw new NotFoundException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
-        if (jsonModel != null) {
-            validationService.isAmountCorrect(this.amount = jsonModel.getAmount());
             Calculation calculation  = generateCalculation(calculationFactory.
-                    getInterface(jsonModel.getName()), investmentOptional.get());
+                    getInterface(jsonModel.getName()), investmentOptional.get(),jsonModel.getAmount());
             calculationDAO.save(calculation);
 
             return new ResultModel(calculation);
-        }
-
-        return null;
     }
 
-
-        private Calculation generateCalculation(CalculationInterface calculationInterface, Investment investment)
+        private Calculation generateCalculation(CalculationInterface calculationInterface, Investment investment, double amount)
                 throws WrongDataException
         {
             int days = investment.getDateTo().getDayOfYear() - investment.getDateFrom().getDayOfYear();
@@ -63,7 +57,6 @@ public class CalculationService {
 
             return new Calculation(days, amount, today, investment, profit);
     }
-
 
     public ResultModel getCalculationById(int id){
         Optional<Calculation> calculationOptional = calculationDAO.findById(id);

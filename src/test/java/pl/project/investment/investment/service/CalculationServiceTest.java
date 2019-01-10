@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.project.investment.investment.JSON.JsonModel;
@@ -15,8 +15,6 @@ import pl.project.investment.investment.entity.Calculation;
 import pl.project.investment.investment.entity.Investment;
 import pl.project.investment.investment.enums.TypeImplementation;
 import pl.project.investment.investment.exception.NotFoundException;
-import pl.project.investment.investment.service.impl.AtTheEndInterest;
-import pl.project.investment.investment.service.impl.DayInterest;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -25,9 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest({CalculationService.class, AtTheEndInterest.class, DayInterest.class,ValidationService.class, CalculationFactory.class})
-
-
+@SpringBootTest
 public class CalculationServiceTest {
 
     private Investment investment;
@@ -46,8 +42,7 @@ public class CalculationServiceTest {
                 LocalDate.of(2018, 10, 1),
                 LocalDate.of(2018, 10, 30));
 
-        calculation = new Calculation(1, 1000.00, LocalDate.now(), investment, 3.33);;
-
+        calculation = new Calculation(1, 1000.00, LocalDate.now(), investment, 3.33);
     }
 
     @Test
@@ -66,16 +61,12 @@ public class CalculationServiceTest {
 
     @Test
     public void doCalculation() {
-
         ResultModel rm = new ResultModel(100,4.0,29,
-                LocalDate.now(),0.29);
+                LocalDate.now(),0.32);
         JsonModel jsonModel = new JsonModel(TypeImplementation.EndAlgorithm,100.0);
         when(investmentDAO.findById(1)).thenReturn(Optional.ofNullable(investment));
         ResultModel resultModel = calculationService.doCalculation(1 ,jsonModel);
-        System.out.println(resultModel);
 
-        //TODO do sprawdzenia czemu zaczyna liczyć index od 29 ??
         assertEquals(rm ,resultModel);
-        assertEquals(rm.getAmount(), resultModel.getAmount(),0.1);
     }
 }

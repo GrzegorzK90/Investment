@@ -1,7 +1,7 @@
 package pl.project.investment.investment.service;
 
-
 import pl.project.investment.investment.enums.TypeImplementation;
+
 
 public interface CalculationInterface {
 	double DAYS_IN_YEAR = 360;

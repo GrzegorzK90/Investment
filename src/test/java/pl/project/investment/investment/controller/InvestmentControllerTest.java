@@ -1,4 +1,4 @@
-package pl.project.investment.investment.resource;
+package pl.project.investment.investment.controller;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class InvestmentResourceTest {
+public class InvestmentControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -39,6 +39,7 @@ public class InvestmentResourceTest {
     private CalculationDAO calculationDAO;
     @MockBean
     private InvestmentDAO investmentDAO;
+
 
     @Test
     public void testGettingAllInvestment() throws Exception {
@@ -83,22 +84,33 @@ public class InvestmentResourceTest {
     }
 
     @Test
-    public void testWrongDataPeriodExceptionDay() throws Exception{
+    public void testAddingWrongDateInvestment() throws Exception {
         mockMvc.perform(put("/investments/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"Lokata\",\"dateFrom\":\"2018-10-01\",\"dateTo\":\"2018-09-30\",\"interestRate\":\"4.0\"}"))
-                .andExpect(jsonPath("@.message",is(ErrorMessages.NEGATIVE_DAY.getErrorMessage())))
+                .content("{\"name\":\"Lokata\",\"dateFrom\":\"2018-10-01\",\"dateTo\":\"2017-10-30\",\"interestRate\":\"4.0\"}"))
+                .andExpect(jsonPath("@.message", is(ErrorMessages.WRONG_DATE.getErrorMessage())))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void testWrongDataPeriodExceptionZero() throws Exception{
+    public void testAddingNullNameInvestment() throws Exception {
         mockMvc.perform(put("/investments/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"Lokata\",\"dateFrom\":\"2018-10-01\",\"dateTo\":\"2018-10-01\",\"interestRate\":\"4.0\"}"))
-                .andExpect(jsonPath("@.message",is(ErrorMessages.ZERO_DAY.getErrorMessage())))
+                .content("{\"dateFrom\":\"2018-10-01\",\"dateTo\":\"2018-10-30\",\"interestRate\":\"4.0\"}"))
+                .andExpect(jsonPath("@.message", is("must not be null")))
                 .andExpect(status().isBadRequest());
     }
+
+
+    @Test
+    public void testWrongDataPeriodExceptionDay() throws Exception {
+        mockMvc.perform(put("/investments/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"Lokata\",\"dateFrom\":\"2018-10-01\",\"dateTo\":\"2018-09-30\",\"interestRate\":\"4.0\"}"))
+                .andExpect(jsonPath("@.message", is(ErrorMessages.WRONG_DATE.getErrorMessage())))
+                .andExpect(status().isBadRequest());
+    }
+
 
     @Test
     public void testWrongInterestRateTypeException() throws Exception {
@@ -106,7 +118,6 @@ public class InvestmentResourceTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"Lokata\",\"dateFrom\":\"2018-10-29\",\"dateTo\":\"2018-10-30\",\"interestRate\":\"Do\"}"))
                 .andExpect(jsonPath("@.message", is(ErrorMessages.CONVERSION_TYPE_ERROR.getErrorMessage())))
-
                 .andExpect(status().isBadRequest());
     }
 
@@ -116,7 +127,7 @@ public class InvestmentResourceTest {
                 LocalDate.of(2018, 10, 1), LocalDate.of(2018, 10, 30));
         Calculation cal = new Calculation(1000.00, LocalDate.now(), inv, 4.0);
 
-        when(investmentDAO.findById(1)).thenReturn(java.util.Optional.of(inv));
+        when(investmentDAO.findById(1)).thenReturn(Optional.of(inv));
         when(calculationDAO.save(cal)).thenReturn(cal);
 
         mockMvc.perform(post("/investments/{id}/calculate", 1)
@@ -154,7 +165,7 @@ public class InvestmentResourceTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"DayAlgorithm\", \"amount\": \"0.00\"}"))
-                .andExpect(jsonPath("@.message", is(ErrorMessages.ZERO_VALUE.getErrorMessage())))
+                .andExpect(jsonPath("@.message", is(ErrorMessages.WRONG_VALUE.getErrorMessage() + "amount = 0.0")))
                 .andExpect(status().isBadRequest());
     }
 
@@ -169,7 +180,7 @@ public class InvestmentResourceTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"DayAlgorithm\", \"amount\": \"-20.00\"}"))
-                .andExpect(jsonPath("@.message", is(ErrorMessages.NEGATIVE_VALUE.getErrorMessage())))
+                .andExpect(jsonPath("@.message", is(ErrorMessages.WRONG_VALUE.getErrorMessage() + "amount = -20.0")))
                 .andExpect(status().isBadRequest());
     }
 
@@ -182,7 +193,7 @@ public class InvestmentResourceTest {
         Calculation cal = new Calculation(1, 1000.00, LocalDate.now(), inv, 3.33);
 
         when(calculationDAO.findById(1)).thenReturn(Optional.ofNullable(cal));
-        
+
         mockMvc.perform(get("/calculations/{id}", 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("@.amount", is(1000.0)))

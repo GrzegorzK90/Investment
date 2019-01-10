@@ -20,16 +20,10 @@ public class CalculationFactoryTest {
 
     @Test
     public void getInterfaceDayImpl() {
-        assertEquals(calculationFactory.getInterface(TypeImplementation.EndAlgorithm).getClass(),AtTheEndInterest.class);
+        assertEquals(calculationFactory.getInterface(TypeImplementation.EndAlgorithm).getClass(), AtTheEndInterest.class);
     }
     @Test
     public void getInterfaceEndImpl() {
         assertEquals(calculationFactory.getInterface(TypeImplementation.DayAlgorithm).getClass(),DayInterest.class);
     }
-
-//    @Test
-//    public void getAllInterfaceAvailable(){
-//        EnumSet.allOf(TypeImplementation.class).forEach(d ->  assertEquals(calculationFactory.getInterface(d).getType(),d));
-//    }
-
 }

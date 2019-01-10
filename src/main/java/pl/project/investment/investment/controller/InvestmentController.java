@@ -1,10 +1,11 @@
-package pl.project.investment.investment.resource;
+package pl.project.investment.investment.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.project.investment.investment.JSON.InvestmentModel;
 import pl.project.investment.investment.JSON.JsonModel;
 import pl.project.investment.investment.JSON.ResultModel;
 import pl.project.investment.investment.entity.Investment;
@@ -12,14 +13,17 @@ import pl.project.investment.investment.response.ResponseHeader;
 import pl.project.investment.investment.service.CalculationService;
 import pl.project.investment.investment.service.InvestmentService;
 
+import javax.validation.Valid;
 import java.util.List;
+
 
 /**
  * InvestmentResource class with mapping 
  *
  */
 @RestController
-public class InvestmentResource {
+
+public class InvestmentController {
 
 	private CalculationService calculationService;
 	private InvestmentService investmentService;
@@ -27,17 +31,13 @@ public class InvestmentResource {
 
 	@Lazy
 	@Autowired
-	public InvestmentResource(
+	public InvestmentController(
 							  CalculationService calculationService,
 							  InvestmentService investmentService){
 		this.calculationService = calculationService;
 		this.investmentService = investmentService;
 	}
 
-	/**
-	 * 
-	 * @return InvestmentRepository List with all investment 
-	 */
 	@GetMapping("/investments")
 	public List<Investment> retrieveAllInvestment() {
 
@@ -46,7 +46,7 @@ public class InvestmentResource {
 	
 	@PutMapping("/investments/add")
 	@ResponseBody
-	public ResponseEntity<String> addInvestment(@RequestBody Investment investment) {
+	public ResponseEntity<String> addInvestment(@Valid @RequestBody InvestmentModel investment) {
 
 		int id = investmentService.save(investment);
 
@@ -54,18 +54,14 @@ public class InvestmentResource {
 	}
 
 	@PostMapping("/investments/{id}/calculate")
-	public ResponseEntity<String> calculate(@PathVariable int id, @RequestBody JsonModel jsonModel) {
+	public ResponseEntity<String> calculate(@PathVariable int id, @Valid @RequestBody JsonModel jsonModel) {
 
 		ResultModel rm = calculationService.doCalculation(id ,jsonModel);
 
 		return new ResponseEntity<>(rm.toString(),
 				responseHeader.getHeader("/calculations/{id}",rm.getCalculationId()), HttpStatus.OK);
 	}
-	/**
-	 * 
-	 * @param id historical calculation
-	 * @return ResultModel object with result of old Calculation
-	 */
+
 	@GetMapping("/calculations/{id}")
 	public ResultModel getCalculationById(@PathVariable int id) {
 		return calculationService.getCalculationById(id);

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+import pl.project.investment.investment.JSON.InvestmentModel;
 import pl.project.investment.investment.dao.InvestmentDAO;
 import pl.project.investment.investment.entity.Investment;
 
@@ -17,8 +18,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
-//@WebMvcTest({InvestmentService.class,ValidationService.class})
-@SpringBootTest(classes = {CalculationService.class, ValidationService.class})
+@SpringBootTest
 public class InvestmentServiceTest {
 
 
@@ -39,7 +39,15 @@ public class InvestmentServiceTest {
                 LocalDate.of(2018,
                         10,
                         30));
-        Investment investment = new Investment("Lokata",
+        InvestmentModel investment = new InvestmentModel("Lokata",
+                4.0,
+                LocalDate.of(2018,
+                        10,
+                        1),
+                LocalDate.of(2018,
+                        10,
+                        30));
+        Investment investment1 = new Investment("Lokata",
                 4.0,
                 LocalDate.of(2018,
                         10,
@@ -48,7 +56,7 @@ public class InvestmentServiceTest {
                         10,
                         30));
 
-        Mockito.when(investmentDAO.save(investment)).thenReturn(savedInvestment);
+        Mockito.when(investmentDAO.save(investment1)).thenReturn(savedInvestment);
 
         assertEquals(1,investmentService.save(investment));
 

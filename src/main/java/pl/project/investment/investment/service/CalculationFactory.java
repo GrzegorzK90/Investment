@@ -11,7 +11,7 @@ import java.util.Map;
 @Component
 public class CalculationFactory {
 
-	private static Map<TypeImplementation,CalculationInterface> calculationInterfaceMap = new HashMap<>();
+	private static final Map<TypeImplementation, CalculationInterface> calculationInterfaceMap = new HashMap<>();
 
 	@Autowired
 	public CalculationFactory(List<CalculationInterface> list){

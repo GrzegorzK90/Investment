@@ -20,9 +20,9 @@ import static com.google.common.base.Preconditions.checkArgument;
 @Service
 public class CalculationService {
 
-    private CalculationDAO calculationDAO;
-    private InvestmentDAO investmentDAO;
-    private CalculationFactory calculationFactory;
+    private final CalculationDAO calculationDAO;
+    private final InvestmentDAO investmentDAO;
+    private final CalculationFactory calculationFactory;
 
 
     @Autowired

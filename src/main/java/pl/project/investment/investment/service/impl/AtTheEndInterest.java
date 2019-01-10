@@ -11,7 +11,7 @@ import pl.project.investment.investment.enums.TypeImplementation;
 @Component
 public class AtTheEndInterest extends CalculationImpl {
 
-	private TypeImplementation type = TypeImplementation.EndAlgorithm;
+	private final TypeImplementation type = TypeImplementation.EndAlgorithm;
 
 	@Override
 	double doCalc(int days, double interest, double amount) {

@@ -11,7 +11,7 @@ import pl.project.investment.investment.enums.TypeImplementation;
 @Component
 public class DayInterest extends CalculationImpl {
 
-	private TypeImplementation type = TypeImplementation.DayAlgorithm;
+	private final TypeImplementation type = TypeImplementation.DayAlgorithm;
 
 	@Override
     public TypeImplementation getType() {

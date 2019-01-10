@@ -11,11 +11,13 @@ import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+@SuppressWarnings("unused")
 @Constraint(validatedBy = {DateFromToValidation.class})
 @Target({TYPE, ANNOTATION_TYPE})
 @Retention(RUNTIME)
 @Documented
 public @interface DataFromToValidationAnnotation {
+
     String message() default "DateFrom is bigger Than DateTo";
 
     Class<?>[] groups() default {};

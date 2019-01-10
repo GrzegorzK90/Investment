@@ -1,6 +1,5 @@
 package pl.project.investment.investment.service;
 
-import com.google.common.annotations.GwtCompatible;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.project.investment.investment.JSON.JsonModel;
@@ -19,8 +18,7 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkArgument;
 
 @Service
-@GwtCompatible
-public class CalculationService extends ValidationService {
+public class CalculationService {
 
     private CalculationDAO calculationDAO;
     private InvestmentDAO investmentDAO;
@@ -42,7 +40,6 @@ public class CalculationService extends ValidationService {
         if (!investmentOptional.isPresent())
             throw new NotFoundException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
-            isAmountCorrect(jsonModel.getAmount());
             Calculation calculation  = generateCalculation(calculationFactory.
                     getInterface(jsonModel.getName()), investmentOptional.get(),jsonModel.getAmount());
             calculationDAO.save(calculation);

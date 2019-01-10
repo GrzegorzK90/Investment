@@ -3,22 +3,24 @@ package pl.project.investment.investment.service.impl;
 import org.decimal4j.util.DoubleRounder;
 import org.springframework.stereotype.Component;
 import pl.project.investment.investment.enums.TypeImplementation;
-import pl.project.investment.investment.service.CalculationInterface;
-import pl.project.investment.investment.service.ValidationService;
 
 /**
  * Class implementing CalculationInterface
  * used to calculate profit for each day
  */
 @Component
-public class DayInterest extends ValidationService implements CalculationInterface {
+public class DayInterest extends CalculationImpl {
 
 	private TypeImplementation type = TypeImplementation.DayAlgorithm;
 
 	@Override
-	public double calculateInterest(int days, double interest, double amount) {
-		super.isValueLogic(days,interest,amount);
-		double percentagePerDay = interest / DAYS_IN_YEAR / (double) 100;
+    public TypeImplementation getType() {
+        return type;
+    }
+
+    @Override
+    double doCalc(int days, double interest, double amount) {
+        double percentagePerDay = interest / DAYS_IN_YEAR / 100.0;
 		double temp = amount;
 		double result;
 		for (int i = 0; i < days; i++) {
@@ -27,10 +29,5 @@ public class DayInterest extends ValidationService implements CalculationInterfa
 		result = temp - amount;
 
 		return DoubleRounder.round(result,2);
-	}
-
-	@Override
-	public TypeImplementation getType() {
-		return type;
 	}
 }

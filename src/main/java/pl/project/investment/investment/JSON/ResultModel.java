@@ -1,13 +1,16 @@
 package pl.project.investment.investment.JSON;
 
+import lombok.Getter;
+import lombok.Setter;
 import pl.project.investment.investment.entity.Calculation;
 
 import java.time.LocalDate;
 import java.util.Objects;
 /**
  * Class creating result from object Calculation
- *
  */
+@Getter
+@Setter
 public final class ResultModel {
 	private final double amount;
 	private final double interest;
@@ -15,8 +18,6 @@ public final class ResultModel {
 	private final LocalDate date;
 	private double profit;
 	private int calculationId;
-
-
 
 	public ResultModel(Calculation calc) {
 		this.amount = calc.getAmount();
@@ -28,15 +29,6 @@ public final class ResultModel {
 		this.calculationId = calc.getId();
 	}
 
-	public ResultModel(double amount, double interest, int period, LocalDate date) {
-		super();
-		this.amount = amount;
-		this.interest = interest;
-		this.period = period;
-		this.date = date;
-	}
-
-	//For Test Constructor
 	public ResultModel(double amount, double interest, int period, LocalDate date, double profit) {
 		super();
 		this.amount = amount;
@@ -44,38 +36,6 @@ public final class ResultModel {
 		this.period = period;
 		this.date = date;
 		this.profit = profit;
-	}
-
-	public double getAmount() {
-		return amount;
-	}
-
-	public double getInterest() {
-		return interest;
-	}
-
-	public int getPeriod() {
-		return period;
-	}
-
-	public LocalDate getDate() {
-		return date;
-	}
-
-	public double getProfit() {
-		return profit;
-	}
-
-	public void setProfit(double profit) {
-		this.profit = profit;
-	}
-
-	public int getCalculationId() {
-		return calculationId;
-	}
-
-	public void setCalculationId(int calculationId) {
-		this.calculationId = calculationId;
 	}
 
 	@Override

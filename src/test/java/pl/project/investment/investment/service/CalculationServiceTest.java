@@ -42,8 +42,7 @@ public class CalculationServiceTest {
                 LocalDate.of(2018, 10, 1),
                 LocalDate.of(2018, 10, 30));
 
-        calculation = new Calculation(1, 1000.00, LocalDate.now(), investment, 3.33);;
-
+        calculation = new Calculation(1, 1000.00, LocalDate.now(), investment, 3.33);
     }
 
     @Test
@@ -62,20 +61,12 @@ public class CalculationServiceTest {
 
     @Test
     public void doCalculation() {
-
         ResultModel rm = new ResultModel(100,4.0,29,
                 LocalDate.now(),0.32);
         JsonModel jsonModel = new JsonModel(TypeImplementation.EndAlgorithm,100.0);
         when(investmentDAO.findById(1)).thenReturn(Optional.ofNullable(investment));
-
         ResultModel resultModel = calculationService.doCalculation(1 ,jsonModel);
-       // ResultModel resultModel = calculationService.doCalculation(1 ,null);
 
         assertEquals(rm ,resultModel);
     }
-
-//    @Test(expected = W)
-//    public wrongRequestBody(){
-//        ResultModel resultModel = calculationService.doCalculation(1 ,jsonModel);
-//    }
 }

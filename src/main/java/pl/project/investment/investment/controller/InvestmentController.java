@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.project.investment.investment.JSON.InvestmentModel;
 import pl.project.investment.investment.JSON.JsonModel;
 import pl.project.investment.investment.JSON.ResultModel;
 import pl.project.investment.investment.entity.Investment;
@@ -37,10 +38,6 @@ public class InvestmentController {
 		this.investmentService = investmentService;
 	}
 
-	/**
-	 * 
-	 * @return InvestmentRepository List with all investment 
-	 */
 	@GetMapping("/investments")
 	public List<Investment> retrieveAllInvestment() {
 
@@ -49,8 +46,7 @@ public class InvestmentController {
 	
 	@PutMapping("/investments/add")
 	@ResponseBody
-	public ResponseEntity<String> addInvestment(@Valid @RequestBody Investment investment) {
-
+	public ResponseEntity<String> addInvestment(@Valid @RequestBody InvestmentModel investment) {
 
 		int id = investmentService.save(investment);
 
@@ -65,11 +61,7 @@ public class InvestmentController {
 		return new ResponseEntity<>(rm.toString(),
 				responseHeader.getHeader("/calculations/{id}",rm.getCalculationId()), HttpStatus.OK);
 	}
-	/**
-	 * 
-	 * @param id historical calculation
-	 * @return ResultModel object with result of old Calculation
-	 */
+
 	@GetMapping("/calculations/{id}")
 	public ResultModel getCalculationById(@PathVariable int id) {
 		return calculationService.getCalculationById(id);

@@ -84,22 +84,33 @@ public class InvestmentControllerTest {
     }
 
     @Test
-    public void testWrongDataPeriodExceptionDay() throws Exception{
+    public void testAddingWrongDateInvestment() throws Exception {
         mockMvc.perform(put("/investments/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"Lokata\",\"dateFrom\":\"2018-10-01\",\"dateTo\":\"2018-09-30\",\"interestRate\":\"4.0\"}"))
-                .andExpect(jsonPath("@.message",is(ErrorMessages.NEGATIVE_DAY.getErrorMessage())))
+                .content("{\"name\":\"Lokata\",\"dateFrom\":\"2018-10-01\",\"dateTo\":\"2017-10-30\",\"interestRate\":\"4.0\"}"))
+                .andExpect(jsonPath("@.message", is(ErrorMessages.WRONG_DATE.getErrorMessage())))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void testWrongDataPeriodExceptionZero() throws Exception{
+    public void testAddingNullNameInvestment() throws Exception {
         mockMvc.perform(put("/investments/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"Lokata\",\"dateFrom\":\"2018-10-01\",\"dateTo\":\"2018-10-01\",\"interestRate\":\"4.0\"}"))
-                .andExpect(jsonPath("@.message",is(ErrorMessages.ZERO_DAY.getErrorMessage())))
+                .content("{\"dateFrom\":\"2018-10-01\",\"dateTo\":\"2018-10-30\",\"interestRate\":\"4.0\"}"))
+                .andExpect(jsonPath("@.message", is("must not be null")))
                 .andExpect(status().isBadRequest());
     }
+
+
+    @Test
+    public void testWrongDataPeriodExceptionDay() throws Exception {
+        mockMvc.perform(put("/investments/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"Lokata\",\"dateFrom\":\"2018-10-01\",\"dateTo\":\"2018-09-30\",\"interestRate\":\"4.0\"}"))
+                .andExpect(jsonPath("@.message", is(ErrorMessages.WRONG_DATE.getErrorMessage())))
+                .andExpect(status().isBadRequest());
+    }
+
 
     @Test
     public void testWrongInterestRateTypeException() throws Exception {
@@ -107,7 +118,6 @@ public class InvestmentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"Lokata\",\"dateFrom\":\"2018-10-29\",\"dateTo\":\"2018-10-30\",\"interestRate\":\"Do\"}"))
                 .andExpect(jsonPath("@.message", is(ErrorMessages.CONVERSION_TYPE_ERROR.getErrorMessage())))
-
                 .andExpect(status().isBadRequest());
     }
 
@@ -155,7 +165,7 @@ public class InvestmentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"DayAlgorithm\", \"amount\": \"0.00\"}"))
-                .andExpect(jsonPath("@.message", is(ErrorMessages.ZERO_VALUE.getErrorMessage())))
+                .andExpect(jsonPath("@.message", is(ErrorMessages.WRONG_VALUE.getErrorMessage() + "amount = 0.0")))
                 .andExpect(status().isBadRequest());
     }
 
@@ -170,7 +180,7 @@ public class InvestmentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"DayAlgorithm\", \"amount\": \"-20.00\"}"))
-                .andExpect(jsonPath("@.message", is(ErrorMessages.NEGATIVE_VALUE.getErrorMessage())))
+                .andExpect(jsonPath("@.message", is(ErrorMessages.WRONG_VALUE.getErrorMessage() + "amount = -20.0")))
                 .andExpect(status().isBadRequest());
     }
 

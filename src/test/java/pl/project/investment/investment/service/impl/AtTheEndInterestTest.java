@@ -1,15 +1,12 @@
 package pl.project.investment.investment.service.impl;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
 import pl.project.investment.investment.service.CalculationInterface;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 
-@RunWith(SpringRunner.class)
 public class AtTheEndInterestTest {
 
     private CalculationInterface test;
@@ -24,7 +21,7 @@ public class AtTheEndInterestTest {
 
     @Test
     public void testCorrectValue() {
-        assertEquals(497.60, test.calculateInterest(360, 1.1, 45236.4),delta);
+        assertThat(test.calculateInterest(360, 1.1, 45236.4), CoreMatchers.is(497.60));
     }
     @Test
     public void testCorrectValue2() {
@@ -34,6 +31,10 @@ public class AtTheEndInterestTest {
     public void testCorrectValue3() {
         assertEquals(1000.00, test.calculateInterest(90, 4, 100000), delta);
     }
+//    @Test
+//    public void testWrongValueZero(){
+//        assertEquals(-100.00,test.calculateInterest(-100,1,1),delta);
+//    }
     @Test
     public void testWrongValue(){
         assertNotEquals(7500027.76, test.calculateInterest(1, 4.5, 545456564),delta); }

@@ -17,8 +17,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
-//@WebMvcTest({InvestmentService.class,ValidationService.class})
-@SpringBootTest(classes = {CalculationService.class, ValidationService.class})
+@SpringBootTest
 public class InvestmentServiceTest {
 
 

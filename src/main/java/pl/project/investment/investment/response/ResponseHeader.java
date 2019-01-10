@@ -10,7 +10,7 @@ public class ResponseHeader {
     private String location;
 
     public HttpHeaders getHeader(String path, int id){
-        URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/calculations/{id}")
+        URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path(path)
                 .buildAndExpand(id).toUri();
 
         HttpHeaders responseHeaders = new HttpHeaders();

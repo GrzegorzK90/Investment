@@ -14,7 +14,7 @@ public class CalculationFactory {
 	private static Map<TypeImplementation,CalculationInterface> calculationInterfaceMap = new HashMap<>();
 
 	@Autowired
-	private CalculationFactory(List<CalculationInterface> list){
+	public CalculationFactory(List<CalculationInterface> list){
 		for (CalculationInterface calInterface: list  ) {
 			calculationInterfaceMap.put(calInterface.getType(),calInterface);
 		}

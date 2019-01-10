@@ -1,4 +1,4 @@
-package pl.project.investment.investment.resource;
+package pl.project.investment.investment.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -12,14 +12,17 @@ import pl.project.investment.investment.response.ResponseHeader;
 import pl.project.investment.investment.service.CalculationService;
 import pl.project.investment.investment.service.InvestmentService;
 
+import javax.validation.Valid;
 import java.util.List;
+
 
 /**
  * InvestmentResource class with mapping 
  *
  */
 @RestController
-public class InvestmentResource {
+
+public class InvestmentController {
 
 	private CalculationService calculationService;
 	private InvestmentService investmentService;
@@ -27,7 +30,7 @@ public class InvestmentResource {
 
 	@Lazy
 	@Autowired
-	public InvestmentResource(
+	public InvestmentController(
 							  CalculationService calculationService,
 							  InvestmentService investmentService){
 		this.calculationService = calculationService;
@@ -46,7 +49,8 @@ public class InvestmentResource {
 	
 	@PutMapping("/investments/add")
 	@ResponseBody
-	public ResponseEntity<String> addInvestment(@RequestBody Investment investment) {
+	public ResponseEntity<String> addInvestment(@Valid @RequestBody Investment investment) {
+
 
 		int id = investmentService.save(investment);
 
@@ -54,7 +58,7 @@ public class InvestmentResource {
 	}
 
 	@PostMapping("/investments/{id}/calculate")
-	public ResponseEntity<String> calculate(@PathVariable int id, @RequestBody JsonModel jsonModel) {
+	public ResponseEntity<String> calculate(@PathVariable int id, @Valid @RequestBody JsonModel jsonModel) {
 
 		ResultModel rm = calculationService.doCalculation(id ,jsonModel);
 

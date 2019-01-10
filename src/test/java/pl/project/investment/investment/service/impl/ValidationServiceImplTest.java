@@ -1,27 +1,16 @@
 package pl.project.investment.investment.service.impl;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
 import pl.project.investment.investment.entity.Investment;
 import pl.project.investment.investment.exception.WrongDataException;
 import pl.project.investment.investment.service.ValidationService;
 
 import java.time.LocalDate;
 
-@RunWith(SpringRunner.class)
-
 public class ValidationServiceImplTest {
 
+    private ValidationService validationService = new ValidationServiceImpl();
 
-
-    private ValidationService validationService;
-
-    @Before
-    public void init(){
-        validationService = new ValidationServiceImpl();
-    }
 
     @Test
     public void isAmountCorrectCorrectValue() {

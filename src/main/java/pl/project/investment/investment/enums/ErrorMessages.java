@@ -7,7 +7,9 @@ public enum ErrorMessages {
         NO_ALGORITHM_EXIST("Algorithm don't exist"),
         CONVERSION_TYPE_ERROR("Wrong type in request body"),
         ZERO_DAY("Investment is for 0 day error"),
-        NEGATIVE_DAY("Investment is for negative number of day error");
+        NEGATIVE_DAY("Investment is for negative number of day error"),
+        WRONG_REQUEST_BODY("Wrong request body please read documentation"),
+        NO_LOGIC("Wrong number this calculation does not make sense - ");
 
         private String errorMessage;
 

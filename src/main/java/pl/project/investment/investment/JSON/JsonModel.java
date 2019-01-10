@@ -5,7 +5,7 @@ import pl.project.investment.investment.enums.TypeImplementation;
 /**
  * Class used to get parameters from user to generate calculation
  */
-public  class JsonModel {
+public class JsonModel {
 	 private TypeImplementation name;
 	 private double amount;
 

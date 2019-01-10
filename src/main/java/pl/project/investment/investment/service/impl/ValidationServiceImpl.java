@@ -13,15 +13,12 @@ public class ValidationServiceImpl implements ValidationService {
     private boolean isNegative(int value){
         return value < 0;
     }
-
     private boolean isNegative(double value){
         return value < 0;
     }
-
     private boolean isZero(int value){
         return value == 0;
     }
-
     private boolean isZero(double value){
         return value == 0;
     }

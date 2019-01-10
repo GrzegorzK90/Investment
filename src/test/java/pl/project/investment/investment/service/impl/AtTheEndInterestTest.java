@@ -1,50 +1,38 @@
 package pl.project.investment.investment.service.impl;
 
 import org.hamcrest.CoreMatchers;
-import org.junit.Before;
 import org.junit.Test;
 import pl.project.investment.investment.service.CalculationInterface;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class AtTheEndInterestTest {
 
-    private CalculationInterface test;
-    private double delta;
-
-
-    @Before
-    public void init(){
-        test = new AtTheEndInterest();
-        delta =  0.001;
-    }
+    private CalculationInterface calculationInterface = new AtTheEndInterest();
 
     @Test
     public void testCorrectValue() {
-        assertThat(test.calculateInterest(360, 1.1, 45236.4), CoreMatchers.is(497.60));
+        assertThat(calculationInterface.calculateInterest(360, 1.1, 45236.4), CoreMatchers.is(497.60));
     }
-    @Test
-    public void testCorrectValue2() {
-        assertEquals(12645.23, test.calculateInterest(360, 23.1, 54741.25),delta);
-    }
-    @Test
-    public void testCorrectValue3() {
-        assertEquals(1000.00, test.calculateInterest(90, 4, 100000), delta);
-    }
-//    @Test
-//    public void testWrongValueZero(){
-//        assertEquals(-100.00,test.calculateInterest(-100,1,1),delta);
-//    }
+
     @Test
     public void testWrongValue(){
-        assertNotEquals(7500027.76, test.calculateInterest(1, 4.5, 545456564),delta); }
-    @Test
-    public void testWrongValue1(){
-        assertNotEquals(1000.00, test.calculateInterest(91, 4, 100000),delta);
+        assertThat( calculationInterface.calculateInterest(1, 4.5, 545456564), CoreMatchers.not(7500027.76));
     }
-    @Test
-    public void testWrongValue2(){
-        assertNotEquals(7500027.76, test.calculateInterest(1, 4.5, 545456564),delta);
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testNegativeDay(){
+        calculationInterface.calculateInterest(-1,4,1000);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testZeroInterest(){
+        calculationInterface.calculateInterest(100,0,1000);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testNegativeAmount(){
+        calculationInterface.calculateInterest(21,4,-1);
     }
 
 }

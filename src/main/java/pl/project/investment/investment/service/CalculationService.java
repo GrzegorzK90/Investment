@@ -12,7 +12,6 @@ import pl.project.investment.investment.entity.Investment;
 import pl.project.investment.investment.enums.ErrorMessages;
 import pl.project.investment.investment.exception.NotFoundException;
 import pl.project.investment.investment.exception.WrongDataException;
-import pl.project.investment.investment.service.impl.ValidationServiceImpl;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -21,20 +20,18 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 @Service
 @GwtCompatible
-public class CalculationService {
+public class CalculationService extends ValidationService {
 
     private CalculationDAO calculationDAO;
     private InvestmentDAO investmentDAO;
-    private ValidationServiceImpl validationServiceImpl;
     private CalculationFactory calculationFactory;
 
 
     @Autowired
     public CalculationService(CalculationDAO calculationDAO, InvestmentDAO investmentDAO,
-                              ValidationServiceImpl validationServiceImpl, CalculationFactory calculationFactory){
+                               CalculationFactory calculationFactory){
         this.calculationDAO = calculationDAO;
         this.investmentDAO = investmentDAO;
-        this.validationServiceImpl = validationServiceImpl;
         this.calculationFactory = calculationFactory;
     }
 
@@ -45,7 +42,7 @@ public class CalculationService {
         if (!investmentOptional.isPresent())
             throw new NotFoundException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 
-            validationServiceImpl.isAmountCorrect(jsonModel.getAmount());
+            isAmountCorrect(jsonModel.getAmount());
             Calculation calculation  = generateCalculation(calculationFactory.
                     getInterface(jsonModel.getName()), investmentOptional.get(),jsonModel.getAmount());
             calculationDAO.save(calculation);

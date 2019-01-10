@@ -3,6 +3,7 @@ import org.decimal4j.util.DoubleRounder;
 import org.springframework.stereotype.Component;
 import pl.project.investment.investment.enums.TypeImplementation;
 import pl.project.investment.investment.service.CalculationInterface;
+import pl.project.investment.investment.service.ValidationService;
 
 /**
  * Class implementing calculationInterface 
@@ -10,13 +11,13 @@ import pl.project.investment.investment.service.CalculationInterface;
  * @author Kuliński
  */
 @Component
-public class AtTheEndInterest implements CalculationInterface {
+public class AtTheEndInterest extends ValidationService implements CalculationInterface {
 
 	private TypeImplementation type = TypeImplementation.EndAlgorithm;
 
 	@Override
 	public double calculateInterest(int days, double interest, double amount) {
-		testIsLogicValues(days,interest,amount);
+		super.isValueLogic(days,interest,amount);
 		double result = amount * (((interest / 100)) * ((days / DAYS_IN_MONTH) / 12));
 		return DoubleRounder.round(result, 2);
 	}

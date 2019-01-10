@@ -4,25 +4,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.project.investment.investment.dao.InvestmentDAO;
 import pl.project.investment.investment.entity.Investment;
-import pl.project.investment.investment.service.impl.ValidationServiceImpl;
 
 import java.util.List;
 
 
 @Service
-public class InvestmentService {
+public class InvestmentService extends ValidationService{
 
-    private ValidationServiceImpl validationServiceImpl;
+//    private ValidationService validationService;
     private InvestmentDAO investmentDAO;
 
     @Autowired
-    public InvestmentService(InvestmentDAO investmentDAO, ValidationServiceImpl validationServiceImpl) {
+    public InvestmentService(InvestmentDAO investmentDAO) {
         this.investmentDAO = investmentDAO;
-        this.validationServiceImpl = validationServiceImpl;
+//        validationService = validationService;
     }
 
     public int save(Investment investment){
-        validationServiceImpl.isInvestmentDateFromToCorrect(investment);
+        isInvestmentDateFromToCorrect(investment);
         Investment savedInvestment = investmentDAO.save(investment);
 
         return savedInvestment.getinvestmentId();

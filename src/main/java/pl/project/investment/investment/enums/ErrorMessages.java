@@ -8,7 +8,7 @@ public enum ErrorMessages {
         WRONG_VALUE("Wrong value in field "),
         WRONG_DATE("DateFrom is bigger Than DateTo");
 
-        private String errorMessage;
+        private final String errorMessage;
 
         ErrorMessages(String errorMessage){
                 this.errorMessage = errorMessage;
@@ -18,7 +18,4 @@ public enum ErrorMessages {
                 return errorMessage;
         }
 
-        public void setErrorMessage(String errorMessage){
-                this.errorMessage = errorMessage;
-        }
 }

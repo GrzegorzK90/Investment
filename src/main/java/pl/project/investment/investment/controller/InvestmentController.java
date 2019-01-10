@@ -25,9 +25,9 @@ import java.util.List;
 
 public class InvestmentController {
 
-	private CalculationService calculationService;
-	private InvestmentService investmentService;
-	private ResponseHeader responseHeader = new ResponseHeader();
+	private final CalculationService calculationService;
+	private final InvestmentService investmentService;
+	private final ResponseHeader responseHeader = new ResponseHeader();
 
 	@Lazy
 	@Autowired

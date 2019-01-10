@@ -14,7 +14,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 @Service
 public class InvestmentService {
 
-    private InvestmentDAO investmentDAO;
+    private final InvestmentDAO investmentDAO;
 
     @Autowired
     public InvestmentService(InvestmentDAO investmentDAO) {

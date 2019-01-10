@@ -1,7 +1,14 @@
 package pl.project.investment.investment.response;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.Date;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class ErrorMessage {
     private Date timestamp;
     private String message;
@@ -11,32 +18,5 @@ public class ErrorMessage {
         this.timestamp = timestamp;
         this.message = message;
         this.description = description;
-    }
-
-    public ErrorMessage() {
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Date getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 }

@@ -8,7 +8,7 @@ import static org.junit.Assert.assertThat;
 
 public class AtTheEndInterestTest {
 
-    private CalculationInterface calculationInterface = new AtTheEndInterest();
+    private final CalculationInterface calculationInterface = new AtTheEndInterest();
 
     @Test
     public void testCorrectValue() {

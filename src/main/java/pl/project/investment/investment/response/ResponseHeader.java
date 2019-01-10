@@ -7,7 +7,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 public class ResponseHeader {
-    private String location;
 
     public HttpHeaders getHeader(String path, int id){
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path(path)

@@ -192,7 +192,7 @@ public class InvestmentControllerTest {
 
         Calculation cal = new Calculation(1, 1000.00, LocalDate.now(), inv, 3.33);
 
-        when(calculationDAO.findById(1)).thenReturn(Optional.ofNullable(cal));
+        when(calculationDAO.findById(1)).thenReturn(Optional.of(cal));
 
         mockMvc.perform(get("/calculations/{id}", 1))
                 .andExpect(status().isOk())

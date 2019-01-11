@@ -21,8 +21,7 @@ public final class ResultModel {
     public ResultModel(Calculation calc) {
         this.amount = calc.getAmount();
         this.interest = calc.getInvestment().getInterestRate();
-        this.period = calc.getInvestment().getDateTo().getDayOfYear()
-                - calc.getInvestment().getDateFrom().getDayOfYear();
+        this.period = calc.getDepositPeriod();
         this.date = calc.getCalculationDate();
         this.profit = calc.getProfit();
         this.calculationId = calc.getId();

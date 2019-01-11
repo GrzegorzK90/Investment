@@ -21,6 +21,12 @@ public class AppExceptionsHandler {
         return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = {InactiveDateException.class})
+    public ResponseEntity<Object> handleAfterDateException(Exception ex) {
+        ErrorMessage errorMessage = new ErrorMessage(new Date(), ex.getMessage(), ex.toString());
+        return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(value = {HttpMessageNotReadableException.class})
     public ResponseEntity<Object> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         ErrorMessage errorMessage = new ErrorMessage(new Date(), ErrorMessages.CONVERSION_TYPE_ERROR.getErrorMessage(),

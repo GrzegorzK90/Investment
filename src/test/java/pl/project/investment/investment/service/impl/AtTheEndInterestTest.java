@@ -17,7 +17,12 @@ public class AtTheEndInterestTest {
 
     @Test
     public void testWrongValue() {
-        assertThat(calculationInterface.calculateInterest(1, 4.5, 545456564), CoreMatchers.not(7500027.76));
+        assertThat(calculationInterface.calculateInterest(30, 4.5, 545456564), CoreMatchers.not(7500027.76));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testExceptionDaysNotInPeriod() {
+        calculationInterface.calculateInterest(160, 2.1, 100);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -27,12 +32,12 @@ public class AtTheEndInterestTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testZeroInterest() {
-        calculationInterface.calculateInterest(100, 0, 1000);
+        calculationInterface.calculateInterest(90, 0, 1000);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testNegativeAmount() {
-        calculationInterface.calculateInterest(21, 4, -1);
+        calculationInterface.calculateInterest(30, 4, -1);
     }
 
 }

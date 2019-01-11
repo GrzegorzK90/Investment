@@ -14,6 +14,7 @@ import pl.project.investment.investment.dao.InvestmentDAO;
 import pl.project.investment.investment.entity.Calculation;
 import pl.project.investment.investment.entity.Investment;
 import pl.project.investment.investment.enums.TypeImplementation;
+import pl.project.investment.investment.exception.InactiveDateException;
 import pl.project.investment.investment.exception.NotFoundException;
 
 import java.time.LocalDate;
@@ -38,11 +39,11 @@ public class CalculationServiceTest {
 
     @Before
     public void init() {
-        investment = new Investment(1, "Lokata", 4.0,
-                LocalDate.of(2018, 10, 1),
-                LocalDate.of(2018, 10, 30));
+        investment = new Investment(1, "Lokata", 4.0, 3,
+                LocalDate.of(2019, 1, 1),
+                LocalDate.of(2019, 2, 28));
 
-        calculation = new Calculation(1, 1000.00, LocalDate.now(), investment, 3.33);
+        calculation = new Calculation(100.0, 90, LocalDate.now(), investment, 3.33);
     }
 
     @Test
@@ -61,16 +62,32 @@ public class CalculationServiceTest {
 
     @Test
     public void doCalculation() {
-        ResultModel rm = new ResultModel(100.0, 4.0, 29,
-                LocalDate.now(), 0.32, 1);
+        ResultModel rm = new ResultModel(100.0, 4.0, 90,
+                LocalDate.now(), 1.0, 1);
         JsonModel jsonModel = new JsonModel(TypeImplementation.EndAlgorithm, 100.0);
-        Calculation calculation2 = new Calculation(29, 100.00, LocalDate.now(), investment, 0.32);
+        Calculation calculation2 = new Calculation(100.0, 90, LocalDate.now(), investment, 1.0);
 
         when(investmentDAO.findById(1)).thenReturn(Optional.ofNullable(investment));
         when(calculationDAO.save(calculation2)).thenReturn(calculation2);
         ResultModel resultModel = calculationService.doCalculation(1, jsonModel);
 
-        System.out.println(rm);
         assertEquals(rm, resultModel);
+    }
+
+
+    //MethodArgumentNotValidException
+    @Test(expected = InactiveDateException.class)
+//    @Test(expected = MethodArgumentNotValidException.class)
+    public void doCalculationAfterDate() {
+        JsonModel jsonModel = new JsonModel(TypeImplementation.EndAlgorithm, 100.0);
+
+        investment = new Investment(1, "Lokata", 4.0, 3,
+                LocalDate.of(2017, 10, 1),
+                LocalDate.of(2017, 10, 30));
+
+
+        when(investmentDAO.findById(1)).thenReturn(Optional.ofNullable(investment));
+        calculationService.doCalculation(1, jsonModel);
+
     }
 }

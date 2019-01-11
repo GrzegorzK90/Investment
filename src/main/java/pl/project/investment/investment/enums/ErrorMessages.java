@@ -6,7 +6,8 @@ public enum ErrorMessages {
     NEGATIVE_DAY("Investment request have negative day error"),
     WRONG_REQUEST_BODY("Wrong request body please read documentation"),
     WRONG_VALUE("Wrong value in field "),
-    WRONG_DATE("DateFrom is bigger Than DateTo");
+    WRONG_DATE("DateFrom is bigger Than DateTo"),
+    INACTIVE_DATE("This Investment is inactive. Available date -> ");
 
     private final String errorMessage;
 

@@ -32,7 +32,7 @@ public class InvestmentServiceTest {
     public void save() {
         Investment savedInvestment = new Investment(1,
                 "Lokata",
-                4.0,
+                4.0, 3,
                 LocalDate.of(2018,
                         10,
                         1),
@@ -40,7 +40,7 @@ public class InvestmentServiceTest {
                         10,
                         30));
         InvestmentModel investment = new InvestmentModel("Lokata",
-                4.0,
+                4.0, 3,
                 LocalDate.of(2018,
                         10,
                         1),
@@ -48,7 +48,7 @@ public class InvestmentServiceTest {
                         10,
                         30));
         Investment investment1 = new Investment("Lokata",
-                4.0,
+                4.0, 3,
                 LocalDate.of(2018,
                         10,
                         1),
@@ -65,9 +65,9 @@ public class InvestmentServiceTest {
     @Test
     public void getAllInvestment() {
         List<Investment> investments = Arrays.asList(
-                new Investment(1, "Lokata", 4.0, LocalDate.of(2018, 10, 1),
+                new Investment(1, "Lokata", 4.0, 3, LocalDate.of(2018, 10, 1),
                         LocalDate.of(2018, 10, 30)),
-                new Investment(2, "Test", 4.0, LocalDate.of(2018, 10, 1),
+                new Investment(2, "Test", 4.0, 3, LocalDate.of(2018, 10, 1),
                         LocalDate.of(2018, 10, 30))
         );
         Mockito.when(investmentDAO.findAll()).thenReturn(investments);

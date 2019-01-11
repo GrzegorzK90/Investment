@@ -14,8 +14,9 @@ abstract class CalculationImpl implements CalculationInterface {
 
     abstract double doCalc(int days, double interest, double amount);
 
-    private void validate(int days, double interest, double amount) {
-        checkArgument(days > 0, ErrorMessages.WRONG_VALUE.getErrorMessage() + "day = " + days);
+    private void validate(Integer days, double interest, double amount) {
+        checkArgument(days.equals(30) || days.equals(90) || days.equals(180) || days.equals(360),
+                ErrorMessages.WRONG_VALUE.getErrorMessage() + "day = " + days);
         checkArgument(interest > 0, ErrorMessages.WRONG_VALUE.getErrorMessage() + "interest = " + interest);
         checkArgument(amount > 0, ErrorMessages.WRONG_VALUE.getErrorMessage() + "amount = " + amount);
     }

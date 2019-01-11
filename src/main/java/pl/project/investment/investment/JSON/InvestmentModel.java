@@ -1,8 +1,6 @@
 package pl.project.investment.investment.JSON;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.format.annotation.NumberFormat;
 import pl.project.investment.investment.validators.DataFromToValidationAnnotation;
 
@@ -12,19 +10,17 @@ import java.time.LocalDate;
 
 
 @DataFromToValidationAnnotation
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class InvestmentModel {
-    @NotNull
+    @NotNull(message = "Empty name field")
     private String name;
-    @NotNull
+    @NotNull(message = "Empty interestRate field")
     @NumberFormat
     @Positive
     private double interestRate;
-    @NotNull
+    @NotNull(message = "Empty dateFrom field")
     private LocalDate dateFrom;
-    @NotNull
+    @NotNull(message = "Empty dateTo field")
     private LocalDate dateTo;
 
     public InvestmentModel(String name, double interestRate, LocalDate dateFrom, LocalDate dateTo) {

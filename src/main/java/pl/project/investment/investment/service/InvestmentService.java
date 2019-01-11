@@ -33,7 +33,8 @@ public class InvestmentService {
         return savedInvestment.getInvestmentId();
     }
 
-    public List<Investment> getAllInvestment(){
+    public List<Investment> getAllInvestment() {
         return investmentDAO.findAll();
     }
+
 }

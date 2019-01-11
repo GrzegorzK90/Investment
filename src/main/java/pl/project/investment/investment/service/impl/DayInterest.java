@@ -11,9 +11,9 @@ import pl.project.investment.investment.enums.TypeImplementation;
 @Component
 public class DayInterest extends CalculationImpl {
 
-	private final TypeImplementation type = TypeImplementation.DayAlgorithm;
+    private final TypeImplementation type = TypeImplementation.DayAlgorithm;
 
-	@Override
+    @Override
     public TypeImplementation getType() {
         return type;
     }
@@ -21,13 +21,13 @@ public class DayInterest extends CalculationImpl {
     @Override
     double doCalc(int days, double interest, double amount) {
         double percentagePerDay = interest / DAYS_IN_YEAR / 100.0;
-		double temp = amount;
-		double result;
-		for (int i = 0; i < days; i++) {
-			temp += temp * percentagePerDay;
-		}
-		result = temp - amount;
+        double temp = amount;
+        double result;
+        for (int i = 0; i < days; i++) {
+            temp += temp * percentagePerDay;
+        }
+        result = temp - amount;
 
-		return DoubleRounder.round(result,2);
-	}
+        return DoubleRounder.round(result, 2);
+    }
 }

@@ -80,7 +80,7 @@ public class InvestmentControllerTest {
         mockMvc.perform(put("/investments/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"Lokata\",\"dateFrom\":\"2018-10-01\",\"dateTo\":\"2018-10-30\",\"interestRate\":\"4.0\"}"))
-                .andExpect(status().isCreated());
+                .andExpect(status().isNoContent());
     }
 
     @Test
@@ -97,7 +97,7 @@ public class InvestmentControllerTest {
         mockMvc.perform(put("/investments/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"dateFrom\":\"2018-10-01\",\"dateTo\":\"2018-10-30\",\"interestRate\":\"4.0\"}"))
-                .andExpect(jsonPath("@.message", is("must not be null")))
+                .andExpect(jsonPath("@.message", is("Empty name field")))
                 .andExpect(status().isBadRequest());
     }
 
@@ -124,15 +124,17 @@ public class InvestmentControllerTest {
     @Test
     public void testCalculate() throws Exception {
         Investment inv = new Investment(1, "Lokata", 4.0,
-                LocalDate.of(2018, 10, 1), LocalDate.of(2018, 10, 30));
-        Calculation cal = new Calculation(1000.00, LocalDate.now(), inv, 4.0);
+                LocalDate.of(2018, 10, 1),
+                LocalDate.of(2018, 10, 30));
 
-        when(investmentDAO.findById(1)).thenReturn(Optional.of(inv));
-        when(calculationDAO.save(cal)).thenReturn(cal);
+        Calculation calculation2 = new Calculation(29, 100.00, LocalDate.now(), inv, 0.32);
+
+        when(investmentDAO.findById(1)).thenReturn(Optional.ofNullable(inv));
+        when(calculationDAO.save(calculation2)).thenReturn(calculation2);
 
         mockMvc.perform(post("/investments/{id}/calculate", 1)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"DayAlgorithm\", \"amount\": \"1000.00\"}"))
+                .content("{\"name\":\"EndAlgorithm\", \"amount\": \"100.00\"}"))
                 .andExpect(status().isOk());
     }
 

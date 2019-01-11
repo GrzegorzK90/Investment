@@ -9,7 +9,6 @@ public class DateFromToValidation
         implements ConstraintValidator<DataFromToValidationAnnotation, InvestmentModel> {
 
     public void initialize(DataFromToValidationAnnotation constraint) {
-
     }
 
     public boolean isValid(InvestmentModel obj, ConstraintValidatorContext context) {

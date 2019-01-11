@@ -58,7 +58,7 @@ public class InvestmentServiceTest {
 
         Mockito.when(investmentDAO.save(investment1)).thenReturn(savedInvestment);
 
-        assertEquals(1,investmentService.save(investment));
+        assertEquals(1, investmentService.save(investment));
 
     }
 
@@ -74,6 +74,6 @@ public class InvestmentServiceTest {
 
         List<Investment> testList = investmentService.getAllInvestment();
 
-        assertEquals(investments.get(0).getName(),testList.get(0).getName());
+        assertEquals(investments.get(0).getName(), testList.get(0).getName());
     }
 }

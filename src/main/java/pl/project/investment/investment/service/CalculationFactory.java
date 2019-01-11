@@ -11,17 +11,16 @@ import java.util.Map;
 @Component
 public class CalculationFactory {
 
-	private static final Map<TypeImplementation, CalculationInterface> calculationInterfaceMap = new HashMap<>();
+    private static final Map<TypeImplementation, CalculationInterface> calculationInterfaceMap = new HashMap<>();
 
-	@Autowired
-	public CalculationFactory(List<CalculationInterface> list){
-		for (CalculationInterface calInterface: list  ) {
-			calculationInterfaceMap.put(calInterface.getType(),calInterface);
-		}
-	}
+    @Autowired
+    public CalculationFactory(List<CalculationInterface> list) {
+        for (CalculationInterface calInterface : list) {
+            calculationInterfaceMap.put(calInterface.getType(), calInterface);
+        }
+    }
 
-	CalculationInterface getInterface(TypeImplementation name){
-		return calculationInterfaceMap.get(name);
-	}
-
+    CalculationInterface getInterface(TypeImplementation name) {
+        return calculationInterfaceMap.get(name);
+    }
 }

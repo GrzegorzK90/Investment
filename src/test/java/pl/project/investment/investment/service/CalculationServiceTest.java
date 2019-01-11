@@ -37,7 +37,7 @@ public class CalculationServiceTest {
     CalculationService calculationService;
 
     @Before
-    public void init(){
+    public void init() {
         investment = new Investment(1, "Lokata", 4.0,
                 LocalDate.of(2018, 10, 1),
                 LocalDate.of(2018, 10, 30));
@@ -50,7 +50,7 @@ public class CalculationServiceTest {
         ResultModel resultModel = new ResultModel(calculation);
 
         when(calculationDAO.findById(1)).thenReturn(Optional.ofNullable(calculation));
-        assertEquals(calculationService.getCalculationById(1),resultModel);
+        assertEquals(calculationService.getCalculationById(1), resultModel);
     }
 
     @Test(expected = NotFoundException.class)
@@ -61,12 +61,16 @@ public class CalculationServiceTest {
 
     @Test
     public void doCalculation() {
-        ResultModel rm = new ResultModel(100,4.0,29,
-                LocalDate.now(),0.32);
-        JsonModel jsonModel = new JsonModel(TypeImplementation.EndAlgorithm,100.0);
-        when(investmentDAO.findById(1)).thenReturn(Optional.ofNullable(investment));
-        ResultModel resultModel = calculationService.doCalculation(1 ,jsonModel);
+        ResultModel rm = new ResultModel(100.0, 4.0, 29,
+                LocalDate.now(), 0.32, 1);
+        JsonModel jsonModel = new JsonModel(TypeImplementation.EndAlgorithm, 100.0);
+        Calculation calculation2 = new Calculation(29, 100.00, LocalDate.now(), investment, 0.32);
 
-        assertEquals(rm ,resultModel);
+        when(investmentDAO.findById(1)).thenReturn(Optional.ofNullable(investment));
+        when(calculationDAO.save(calculation2)).thenReturn(calculation2);
+        ResultModel resultModel = calculationService.doCalculation(1, jsonModel);
+
+        System.out.println(rm);
+        assertEquals(rm, resultModel);
     }
 }

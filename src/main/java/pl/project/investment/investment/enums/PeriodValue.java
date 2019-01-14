@@ -19,15 +19,8 @@ public enum PeriodValue {
     }
 
     public static PeriodValue valueOf(int i) {
-        switch (i) {
-            case 1:
-                return ONE_MONTHS;
-            case 3:
-                return THREE_MONTHS;
-            case 6:
-                return SIX_MONTHS;
-            case 12:
-                return TWELVE_MONTHS;
+        for (PeriodValue p : PeriodValue.values()) {
+            if (p.period == i) return p;
         }
         throw new WrongDataException(ErrorMessages.WRONG_VALUE.getErrorMessage());
     }

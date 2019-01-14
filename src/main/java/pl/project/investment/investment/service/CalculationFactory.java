@@ -19,7 +19,7 @@ public class CalculationFactory {
             calculationInterfaceMap.put(calInterface.getType(), calInterface);
         }
     }
-
+    
     CalculationInterface getInterface(TypeImplementation name) {
         return calculationInterfaceMap.get(name);
     }

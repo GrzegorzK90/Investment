@@ -31,8 +31,6 @@ public class Investment {
     @Positive
     private Double interestRate;
     @NotNull
-    private Integer depositPeriod;
-    @NotNull
     private PeriodValue periodValue;
     @NotNull
     private LocalDate dateFrom;
@@ -47,15 +45,6 @@ public class Investment {
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
     }
-//
-//    public Investment(int investmentId, String name, Double interestRate, Integer depositPeriod, LocalDate dateFrom, LocalDate dateTo) {
-//        this.investmentId = investmentId;
-//        this.name = name;
-//        this.interestRate = interestRate;
-//        this.depositPeriod = depositPeriod;
-//        this.dateFrom = dateFrom;
-//        this.dateTo = dateTo;
-//    }
 
     public Investment(String name, Double interestRate, PeriodValue depositPeriod, LocalDate dateFrom, LocalDate dateTo) {
         this.name = name;
@@ -65,16 +54,6 @@ public class Investment {
         this.dateTo = dateTo;
     }
 
-
-//    public Investment(String name, Double interestRate, Integer depositPeriod, LocalDate dateFrom, LocalDate dateTo) {
-//        this.name = name;
-//        this.interestRate = interestRate;
-//        this.depositPeriod = depositPeriod;
-//        this.dateFrom = dateFrom;
-//        this.dateTo = dateTo;
-//    }
-
-
     public Investment(InvestmentModel investmentModel) {
         this.name = investmentModel.getName();
         this.interestRate = investmentModel.getInterestRate();
@@ -82,12 +61,4 @@ public class Investment {
         this.dateTo = investmentModel.getDateTo();
         this.periodValue = investmentModel.getPeriodValue();
     }
-
-//    public Investment(InvestmentModel investmentModel) {
-//        this.name = investmentModel.getName();
-//        this.interestRate = investmentModel.getInterestRate();
-//        this.dateFrom = investmentModel.getDateFrom();
-//        this.dateTo = investmentModel.getDateTo();
-//        this.depositPeriod = investmentModel.getDepositPeriod();
-//    }
 }

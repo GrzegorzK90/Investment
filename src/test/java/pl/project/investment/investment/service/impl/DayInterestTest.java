@@ -12,7 +12,12 @@ public class DayInterestTest {
 
     @Test
     public void testCorrectResult() {
-        assertThat(calculationInterface.calculateInterest(180, 4.5, 25000), CoreMatchers.is(568.84));
+        assertThat(calculationInterface.calculateInterest(180, 4.5, 25000), CoreMatchers.is(568.85));
+    }
+
+    @Test
+    public void testCorrectResultMiniAmount() {
+        assertThat(calculationInterface.calculateInterest(360, 1.5, 250.0), CoreMatchers.is(3.60));
     }
 
     @Test

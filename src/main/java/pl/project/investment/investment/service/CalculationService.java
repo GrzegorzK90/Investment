@@ -62,7 +62,6 @@ public class CalculationService {
                 ErrorMessages.INACTIVE_DATE.getErrorMessage() + inv.getDateFrom()
                         + " - " + inv.getDateTo() + " Today is " + LocalDate.now());
 
-
         return investmentOptional.get();
 
     }

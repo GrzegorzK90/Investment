@@ -48,7 +48,7 @@ public class InvestmentControllerTest {
     @Test
     public void testGettingAllInvestment() throws Exception {
         List<Investment> investments = Arrays.asList(
-                new Investment(1, "Lokata", 4.0, PeriodValue.valueOf(3), testDateFrom,
+                new Investment(1, "InvestmentTest", 4.0, PeriodValue.valueOf(3), testDateFrom,
                         testDateTo),
                 new Investment(2, "Test", 4.0, PeriodValue.valueOf(3), testDateFrom.minusYears(1),
                         testDateTo)
@@ -62,11 +62,11 @@ public class InvestmentControllerTest {
     @Test
     public void testAddingInvestment() throws Exception {
         Investment savedInvestment = new Investment(1,
-                "Lokata",
+                "InvestmentTest",
                 4.0, PeriodValue.valueOf(3),
                 testDateFrom,
                 testDateTo);
-        Investment investment = new Investment("Lokata",
+        Investment investment = new Investment("InvestmentTest",
                 4.0, PeriodValue.valueOf(3),
                 testDateFrom,
                 testDateTo);
@@ -75,7 +75,7 @@ public class InvestmentControllerTest {
 
         mockMvc.perform(put("/investments/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"Lokata\",\"dateFrom\":\"" + testDateFrom +
+                .content("{\"name\":\"InvestmentTest\",\"dateFrom\":\"" + testDateFrom +
                         "\",\"depositPeriod\":\"3\",\"dateTo\":\"" + testDateTo + "\",\"interestRate\":\"4.0\"}"))
                 .andExpect(status().isNoContent());
     }
@@ -85,7 +85,7 @@ public class InvestmentControllerTest {
 
         mockMvc.perform(put("/investments/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"Lokata\",\"dateFrom\":\"" + testDateFrom +
+                .content("{\"name\":\"InvestmentTest\",\"dateFrom\":\"" + testDateFrom +
                         "\",\"depositPeriod\":\"5\",\"dateTo\":\"" + testDateTo + "\",\"interestRate\":\"4.0\"}"))
                 .andExpect(status().isBadRequest());
     }
@@ -94,7 +94,7 @@ public class InvestmentControllerTest {
     public void testAddingWrongDateInvestment() throws Exception {
         mockMvc.perform(put("/investments/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"Lokata\",\"depositPeriod\":\"3\",\"dateFrom\":\"" + testDateTo + "\",\"dateTo\":\""
+                .content("{\"name\":\"InvestmentTest\",\"depositPeriod\":\"3\",\"dateFrom\":\"" + testDateTo + "\",\"dateTo\":\""
                         + testDateFrom + "\",\"interestRate\":\"4.0\"}"))
                 .andExpect(jsonPath("@.message", is(ErrorMessages.WRONG_DATE.getErrorMessage())))
                 .andExpect(status().isBadRequest());
@@ -115,7 +115,7 @@ public class InvestmentControllerTest {
     public void testWrongDataPeriodExceptionDay() throws Exception {
         mockMvc.perform(put("/investments/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"Lokata\",\"dateFrom\":\"" + testDateTo + "\",\"depositPeriod\":\"3\",\"dateTo\":\""
+                .content("{\"name\":\"InvestmentTest\",\"dateFrom\":\"" + testDateTo + "\",\"depositPeriod\":\"3\",\"dateTo\":\""
                         + testDateFrom + "\",\"interestRate\":\"4.0\"}"))
                 .andExpect(jsonPath("@.message", is(ErrorMessages.WRONG_DATE.getErrorMessage())))
                 .andExpect(status().isBadRequest());
@@ -126,7 +126,7 @@ public class InvestmentControllerTest {
     public void testWrongInterestRateTypeException() throws Exception {
         mockMvc.perform(put("/investments/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"Lokata\",\"dateFrom\":\"" + testDateFrom + "\",\"depositPeriod\":\"3\",\"dateTo\":\""
+                .content("{\"name\":\"InvestmentTest\",\"dateFrom\":\"" + testDateFrom + "\",\"depositPeriod\":\"3\",\"dateTo\":\""
                         + testDateTo + "\",\"interestRate\":\"Do\"}"))
                 .andExpect(jsonPath("@.message", is(ErrorMessages.CONVERSION_TYPE_ERROR.getErrorMessage())))
                 .andExpect(status().isBadRequest());
@@ -134,7 +134,7 @@ public class InvestmentControllerTest {
 
     @Test
     public void testCalculate() throws Exception {
-        Investment inv = new Investment(1, "Lokata", 4.0, PeriodValue.valueOf(3),
+        Investment inv = new Investment(1, "InvestmentTest", 4.0, PeriodValue.valueOf(3),
                 testDateFrom,
                 testDateTo);
 
@@ -170,7 +170,7 @@ public class InvestmentControllerTest {
 
     @Test
     public void testCalculateZeroAmountException() throws Exception {
-        Investment inv = new Investment(1, "Lokata", 4.0, PeriodValue.valueOf(3),
+        Investment inv = new Investment(1, "InvestmentTest", 4.0, PeriodValue.valueOf(3),
                 testDateFrom,
                 testDateTo);
 
@@ -186,7 +186,7 @@ public class InvestmentControllerTest {
 
     @Test
     public void testCalculateNegativeAmountException() throws Exception {
-        Investment inv = new Investment(1, "Lokata", 4.0, PeriodValue.valueOf(3),
+        Investment inv = new Investment(1, "InvestmentTest", 4.0, PeriodValue.valueOf(3),
                 testDateFrom,
                 testDateTo);
 
@@ -202,7 +202,7 @@ public class InvestmentControllerTest {
 
     @Test
     public void TestGettingCalculationById() throws Exception {
-        Investment inv = new Investment(1, "Lokata", 4.0, PeriodValue.valueOf(3),
+        Investment inv = new Investment(1, "InvestmentTest", 4.0, PeriodValue.valueOf(3),
                 testDateFrom,
                 testDateTo);
 

@@ -1,7 +1,6 @@
 package pl.project.investment.investment.enums;
 
 import pl.project.investment.investment.exception.WrongDataException;
-
 public enum PeriodValue {
     ONE_MONTHS(1),
     THREE_MONTHS(3),

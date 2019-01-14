@@ -8,6 +8,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import pl.project.investment.investment.enums.TypeImplementation;
 import pl.project.investment.investment.service.impl.AtTheEndInterest;
 import pl.project.investment.investment.service.impl.DayInterest;
+import pl.project.investment.investment.service.impl.MonthInterest;
 
 import static org.junit.Assert.assertEquals;
 
@@ -26,5 +27,10 @@ public class CalculationFactoryTest {
     @Test
     public void getInterfaceEndImpl() {
         assertEquals(calculationFactory.getInterface(TypeImplementation.DayAlgorithm).getClass(), DayInterest.class);
+    }
+
+    @Test
+    public void getInterfaceMonthImpl() {
+        assertEquals(calculationFactory.getInterface(TypeImplementation.MonthAlgorithm).getClass(), MonthInterest.class);
     }
 }

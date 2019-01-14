@@ -23,7 +23,8 @@ public class InvestmentService {
     }
 
     public int save(InvestmentModel investment) {
-        checkArgument(investment.getDateTo().isAfter(investment.getDateFrom()), ErrorMessages.NEGATIVE_DAY.getErrorMessage());
+        checkArgument(investment.getDateTo().isAfter(investment.getDateFrom()) ||
+                investment.getDateTo().isEqual(investment.getDateFrom()), ErrorMessages.NEGATIVE_DAY.getErrorMessage());
         checkArgument(investment.getInterestRate() > 0,
                 ErrorMessages.WRONG_VALUE.getErrorMessage() + "interestRate = " + investment.getInterestRate());
 

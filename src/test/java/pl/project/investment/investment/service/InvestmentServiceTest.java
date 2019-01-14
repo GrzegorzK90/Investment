@@ -32,15 +32,15 @@ public class InvestmentServiceTest {
     @Test
     public void save() {
         Investment savedInvestment = new Investment(1,
-                "Lokata",
+                "InvestmentTest",
                 4.0, PeriodValue.valueOf(3),
                 LocalDate.now().minusMonths(1),
                 LocalDate.now().plusMonths(1));
-        InvestmentModel investment = new InvestmentModel("Lokata",
+        InvestmentModel investment = new InvestmentModel("InvestmentTest",
                 4.0, 3,
                 LocalDate.now().minusMonths(1),
                 LocalDate.now().plusMonths(1));
-        Investment investment1 = new Investment("Lokata",
+        Investment investment1 = new Investment("InvestmentTest",
                 4.0, PeriodValue.valueOf(3),
                 LocalDate.now().minusMonths(1),
                 LocalDate.now().plusMonths(1));
@@ -54,7 +54,7 @@ public class InvestmentServiceTest {
     @Test
     public void getAllInvestment() {
         List<Investment> investments = Arrays.asList(
-                new Investment(1, "Lokata", 4.0, PeriodValue.valueOf(3), LocalDate.now().minusMonths(1),
+                new Investment(1, "InvestmentTest", 4.0, PeriodValue.valueOf(3), LocalDate.now().minusMonths(1),
                         LocalDate.now().plusMonths(1)),
                 new Investment(2, "Test", 4.0, PeriodValue.valueOf(3), LocalDate.now().minusYears(1),
                         LocalDate.now().plusYears(1))

@@ -1,80 +1,93 @@
 package pl.project.investment.investment.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.format.annotation.NumberFormat;
-import pl.project.investment.investment.validators.DataFromToValidationAnnotation;
+import pl.project.investment.investment.JSON.InvestmentModel;
+import pl.project.investment.investment.enums.PeriodValue;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
+
 /**
  * Class with model of Entity Investment
  */
 @Entity
 @SequenceGenerator(name = "INV_SEQ", allocationSize = 1)
-@DataFromToValidationAnnotation
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class Investment {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "INV_SEQ")
-	private int investmentId;
-	@NotNull
-	private String name;
-	@NotNull
-	@NumberFormat
-	@Positive
-	private double interestRate;
-	@NotNull
-	private LocalDate dateFrom;
-	@NotNull
-	private LocalDate dateTo;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "INV_SEQ")
+    @NotNull
+    private int investmentId;
+    @NotNull
+    private String name;
+    @NumberFormat
+    @NotNull
+    @Positive
+    private Double interestRate;
+    @NotNull
+    private Integer depositPeriod;
+    @NotNull
+    private PeriodValue periodValue;
+    @NotNull
+    private LocalDate dateFrom;
+    @NotNull
+    private LocalDate dateTo;
 
-	@OneToMany(mappedBy = "investment")
-	@JsonIgnore
-	private List<Calculation> calculation;
+    public Investment(int investmentId, String name, Double interestRate, PeriodValue depositPeriod, LocalDate dateFrom, LocalDate dateTo) {
+        this.investmentId = investmentId;
+        this.name = name;
+        this.interestRate = interestRate;
+        this.periodValue = depositPeriod;
+        this.dateFrom = dateFrom;
+        this.dateTo = dateTo;
+    }
+//
+//    public Investment(int investmentId, String name, Double interestRate, Integer depositPeriod, LocalDate dateFrom, LocalDate dateTo) {
+//        this.investmentId = investmentId;
+//        this.name = name;
+//        this.interestRate = interestRate;
+//        this.depositPeriod = depositPeriod;
+//        this.dateFrom = dateFrom;
+//        this.dateTo = dateTo;
+//    }
+
+    public Investment(String name, Double interestRate, PeriodValue depositPeriod, LocalDate dateFrom, LocalDate dateTo) {
+        this.name = name;
+        this.interestRate = interestRate;
+        this.periodValue = depositPeriod;
+        this.dateFrom = dateFrom;
+        this.dateTo = dateTo;
+    }
 
 
-	public Investment(int investmentId, String name, double interestRate, LocalDate dateFrom, LocalDate dateTo) {
-		this.investmentId = investmentId;
-		this.name = name;
-		this.interestRate = interestRate;
-		this.dateFrom = dateFrom;
-		this.dateTo = dateTo;
-	}
-	public Investment( String name, double interestRate, LocalDate dateFrom, LocalDate dateTo) {
-		this.name = name;
-		this.interestRate = interestRate;
-		this.dateFrom = dateFrom;
-		this.dateTo = dateTo;
-	}
+//    public Investment(String name, Double interestRate, Integer depositPeriod, LocalDate dateFrom, LocalDate dateTo) {
+//        this.name = name;
+//        this.interestRate = interestRate;
+//        this.depositPeriod = depositPeriod;
+//        this.dateFrom = dateFrom;
+//        this.dateTo = dateTo;
+//    }
 
-	@Override
-	public String toString() {
-		return "Investment [id=" + investmentId + ", name=" + name + ", interestRate=" + interestRate + ", dateFrom="
-				+ dateFrom + ", dateTo=" + dateTo + ", calculation=" + calculation + "]";
-	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if(obj == this) return true;
-		if (!(obj instanceof Investment)){
-			return false;
-		}
-		Investment inv = (Investment) obj;
+    public Investment(InvestmentModel investmentModel) {
+        this.name = investmentModel.getName();
+        this.interestRate = investmentModel.getInterestRate();
+        this.dateFrom = investmentModel.getDateFrom();
+        this.dateTo = investmentModel.getDateTo();
+        this.periodValue = investmentModel.getPeriodValue();
+    }
 
-		return investmentId == inv.investmentId &&
-				interestRate == inv.interestRate &&
-				Objects.equals(name,inv.name) &&
-				Objects.equals(dateFrom,inv.dateFrom) &&
-				Objects.equals(dateTo,inv.dateTo);
-	}
+//    public Investment(InvestmentModel investmentModel) {
+//        this.name = investmentModel.getName();
+//        this.interestRate = investmentModel.getInterestRate();
+//        this.dateFrom = investmentModel.getDateFrom();
+//        this.dateTo = investmentModel.getDateTo();
+//        this.depositPeriod = investmentModel.getDepositPeriod();
+//    }
 }

@@ -1,6 +1,5 @@
 package pl.project.investment.investment.validators;
 
-
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;
@@ -11,7 +10,6 @@ import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@SuppressWarnings("unused")
 @Constraint(validatedBy = {DateFromToValidation.class})
 @Target({TYPE, ANNOTATION_TYPE})
 @Retention(RUNTIME)
@@ -23,6 +21,4 @@ public @interface DataFromToValidationAnnotation {
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
-
-
 }

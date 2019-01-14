@@ -22,8 +22,9 @@ public class CalculationFactoryTest {
     public void getInterfaceDayImpl() {
         assertEquals(calculationFactory.getInterface(TypeImplementation.EndAlgorithm).getClass(), AtTheEndInterest.class);
     }
+
     @Test
     public void getInterfaceEndImpl() {
-        assertEquals(calculationFactory.getInterface(TypeImplementation.DayAlgorithm).getClass(),DayInterest.class);
+        assertEquals(calculationFactory.getInterface(TypeImplementation.DayAlgorithm).getClass(), DayInterest.class);
     }
 }

@@ -15,8 +15,14 @@ import java.util.Date;
 @ControllerAdvice
 public class AppExceptionsHandler {
 
-    @ExceptionHandler(value = {NotFoundException.class,WrongDataException.class})
-    public ResponseEntity<Object> handleNotFoundException(Exception ex){
+    @ExceptionHandler(value = {NotFoundException.class, WrongDataException.class})
+    public ResponseEntity<Object> handleNotFoundException(Exception ex) {
+        ErrorMessage errorMessage = new ErrorMessage(new Date(), ex.getMessage(), ex.toString());
+        return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {InactiveDateException.class})
+    public ResponseEntity<Object> handleAfterDateException(Exception ex) {
         ErrorMessage errorMessage = new ErrorMessage(new Date(), ex.getMessage(), ex.toString());
         return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
@@ -34,8 +40,9 @@ public class AppExceptionsHandler {
         return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
+
     @ExceptionHandler(value = {Exception.class})
-    public ResponseEntity<Object> handleOtherException(Exception ex){
+    public ResponseEntity<Object> handleOtherException(Exception ex) {
         ErrorMessage errorMessage = new ErrorMessage(new Date(), ex.getMessage(), ex.toString());
         return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }

@@ -1,5 +1,6 @@
 package pl.project.investment.investment.service;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +14,7 @@ import pl.project.investment.investment.dao.CalculationDAO;
 import pl.project.investment.investment.dao.InvestmentDAO;
 import pl.project.investment.investment.entity.Calculation;
 import pl.project.investment.investment.entity.Investment;
+import pl.project.investment.investment.enums.PeriodValue;
 import pl.project.investment.investment.enums.TypeImplementation;
 import pl.project.investment.investment.exception.NotFoundException;
 
@@ -37,12 +39,12 @@ public class CalculationServiceTest {
     CalculationService calculationService;
 
     @Before
-    public void init(){
-        investment = new Investment(1, "Lokata", 4.0,
-                LocalDate.of(2018, 10, 1),
-                LocalDate.of(2018, 10, 30));
+    public void init() {
+        investment = new Investment(1, "Lokata", 4.0, PeriodValue.valueOf(3),
+                LocalDate.now().minusMonths(4),
+                LocalDate.now().plusMonths(5));
 
-        calculation = new Calculation(1, 1000.00, LocalDate.now(), investment, 3.33);
+        calculation = new Calculation(100.0, 90, LocalDate.now(), investment, 3.33);
     }
 
     @Test
@@ -50,7 +52,7 @@ public class CalculationServiceTest {
         ResultModel resultModel = new ResultModel(calculation);
 
         when(calculationDAO.findById(1)).thenReturn(Optional.ofNullable(calculation));
-        assertEquals(calculationService.getCalculationById(1),resultModel);
+        assertEquals(calculationService.getCalculationById(1), resultModel);
     }
 
     @Test(expected = NotFoundException.class)
@@ -61,12 +63,48 @@ public class CalculationServiceTest {
 
     @Test
     public void doCalculation() {
-        ResultModel rm = new ResultModel(100,4.0,29,
-                LocalDate.now(),0.32);
-        JsonModel jsonModel = new JsonModel(TypeImplementation.EndAlgorithm,100.0);
-        when(investmentDAO.findById(1)).thenReturn(Optional.ofNullable(investment));
-        ResultModel resultModel = calculationService.doCalculation(1 ,jsonModel);
+        ResultModel rm = new ResultModel(100.0, 4.0, 90,
+                LocalDate.now(), 1.0, 1);
 
-        assertEquals(rm ,resultModel);
+        JsonModel jsonModel = new JsonModel(TypeImplementation.EndAlgorithm, 100.0);
+        Calculation calculation2 = new Calculation(100.0, 90, LocalDate.now(), investment, 1.0);
+
+        when(investmentDAO.findById(1)).thenReturn(Optional.ofNullable(investment));
+        when(calculationDAO.save(calculation2)).thenReturn(calculation2);
+        ResultModel resultModel = calculationService.doCalculation(1, jsonModel);
+
+        assertEquals(rm, resultModel);
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void doCalculationAfterDate() {
+        JsonModel jsonModel = new JsonModel(TypeImplementation.EndAlgorithm, 100.0);
+
+        investment = new Investment(1, "Lokata", 4.0, PeriodValue.valueOf(3),
+                LocalDate.now().plusMonths(1),
+                LocalDate.now().plusMonths(2));
+
+
+        when(investmentDAO.findById(1)).thenReturn(Optional.ofNullable(investment));
+        calculationService.doCalculation(1, jsonModel);
+
+    }
+
+    @Test
+    public void doCalculationThisDate() {
+        JsonModel jsonModel = new JsonModel(TypeImplementation.EndAlgorithm, 100.0);
+
+        investment = new Investment(1, "Lokata", 4.0, PeriodValue.valueOf(3),
+                LocalDate.now(),
+                LocalDate.now());
+
+        Calculation calculation = new Calculation(0, 100.0, 90, LocalDate.now(), investment, 1.0);
+        ResultModel rm = new ResultModel(100.0, 4.0, 90, LocalDate.now(), 1.0, 0);
+
+        when(investmentDAO.findById(1)).thenReturn(Optional.ofNullable(investment));
+        when(calculationDAO.save(calculation)).thenReturn(calculation);
+
+        Assert.assertEquals(calculationService.doCalculation(1, jsonModel), rm);
     }
 }

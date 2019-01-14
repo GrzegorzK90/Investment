@@ -1,62 +1,58 @@
 package pl.project.investment.investment.JSON;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import pl.project.investment.investment.entity.Calculation;
 
 import java.time.LocalDate;
-import java.util.Objects;
+
 /**
  * Class creating result from object Calculation
  */
-@Getter
-@Setter
+
+@Data
 public final class ResultModel {
-	private final double amount;
-	private final double interest;
-	private final int period;
-	private final LocalDate date;
-	private double profit;
-	private int calculationId;
+    private final Double amount;
+    private final Double interest;
+    private final Integer period;
+    private final LocalDate date;
+    private Double profit;
+    private Integer calculationId;
 
-	public ResultModel(Calculation calc) {
-		this.amount = calc.getAmount();
-		this.interest = calc.getInvestment().getInterestRate();
-		this.period = calc.getInvestment().getDateTo().getDayOfYear()
-				- calc.getInvestment().getDateFrom().getDayOfYear();
-		this.date = calc.getCalculationDate();
-		this.profit = calc.getProfit();
-		this.calculationId = calc.getId();
-	}
+    public ResultModel(Calculation calc) {
+        this.amount = calc.getAmount();
+        this.interest = calc.getInvestment().getInterestRate();
+        this.period = calc.getDepositPeriod();
+        this.date = calc.getCalculationDate();
+        this.profit = calc.getProfit();
+        this.calculationId = calc.getId();
+    }
 
-	public ResultModel(double amount, double interest, int period, LocalDate date, double profit) {
-		super();
-		this.amount = amount;
-		this.interest = interest;
-		this.period = period;
-		this.date = date;
-		this.profit = profit;
-	}
+    public ResultModel(double amount, double interest, int period, LocalDate date, double profit, int calculationId) {
+        super();
+        this.amount = amount;
+        this.interest = interest;
+        this.period = period;
+        this.date = date;
+        this.profit = profit;
+        this.calculationId = calculationId;
+    }
 
-	@Override
-	public String toString() {
-		return "amount=" + amount + ", interest=" + interest + ", period=" + period + ", date=" + date
-				+ ", profit=" + profit;
-	}
+    @Override
+    public String toString() {
+        return "amount=" + amount + ", interest=" + interest + ", period="
+                + period + ", profit=" + profit + ", date=" + date;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if(obj == this) return true;
-		if (!(obj instanceof ResultModel)){
-			return false;
-		}
+    @Override
+    public boolean equals(Object object) {
 
-		ResultModel rm = (ResultModel) obj;
+        if (object == this) return true;
+        if (!(object instanceof ResultModel)) {
+            return false;
+        }
+        ResultModel resultModel = (ResultModel) object;
+        return amount.equals(resultModel.amount) && interest.equals(resultModel.interest)
+                && period.equals(resultModel.period) && date.equals(resultModel.date);
 
-		return amount == rm.amount &&
-				interest == rm.interest &&
-				period == rm.period &&
-				profit == rm.profit &&
-				Objects.equals(date,rm.date);
-	}
+    }
 }

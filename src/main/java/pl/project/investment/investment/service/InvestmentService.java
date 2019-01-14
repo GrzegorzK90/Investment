@@ -28,12 +28,13 @@ public class InvestmentService {
                 ErrorMessages.WRONG_VALUE.getErrorMessage() + "interestRate = " + investment.getInterestRate());
 
         Investment savedInvestment = investmentDAO.save(new Investment(investment.getName(),
-                investment.getInterestRate(), investment.getDateFrom(), investment.getDateTo()));
+                investment.getInterestRate(), investment.getPeriodValue(), investment.getDateFrom(), investment.getDateTo()));
 
         return savedInvestment.getInvestmentId();
     }
 
-    public List<Investment> getAllInvestment(){
+    public List<Investment> getAllInvestment() {
         return investmentDAO.findAll();
     }
+
 }

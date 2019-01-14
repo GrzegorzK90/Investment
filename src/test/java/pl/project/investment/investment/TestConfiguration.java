@@ -10,12 +10,12 @@ import pl.project.investment.investment.dao.InvestmentDAO;
 public class TestConfiguration {
 
     @Bean
-    public CalculationDAO calculationDAO(){
+    public CalculationDAO calculationDAO() {
         return Mockito.mock(CalculationDAO.class);
     }
 
     @Bean
-    public InvestmentDAO investmentDAO(){
+    public InvestmentDAO investmentDAO() {
 
         return Mockito.mock(InvestmentDAO.class);
     }

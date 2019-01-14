@@ -9,6 +9,7 @@ import pl.project.investment.investment.dao.InvestmentDAO;
 import pl.project.investment.investment.entity.Calculation;
 import pl.project.investment.investment.entity.Investment;
 import pl.project.investment.investment.enums.ErrorMessages;
+import pl.project.investment.investment.enums.TypeImplementation;
 import pl.project.investment.investment.exception.NotFoundException;
 import pl.project.investment.investment.exception.WrongDataException;
 
@@ -27,42 +28,59 @@ public class CalculationService {
 
     @Autowired
     public CalculationService(CalculationDAO calculationDAO, InvestmentDAO investmentDAO,
-                               CalculationFactory calculationFactory){
+                              CalculationFactory calculationFactory) {
         this.calculationDAO = calculationDAO;
         this.investmentDAO = investmentDAO;
         this.calculationFactory = calculationFactory;
+
     }
 
-    public ResultModel doCalculation(int id, JsonModel jsonModel) {
-        checkArgument(jsonModel != null,ErrorMessages.WRONG_REQUEST_BODY);
+    public ResultModel doCalculation(Integer id, JsonModel jsonModel) {
+        checkArgument(jsonModel != null, ErrorMessages.WRONG_REQUEST_BODY.getErrorMessage());
 
-        Optional<Investment> investmentOptional = investmentDAO.findById(id);
-        if (!investmentOptional.isPresent())
-            throw new NotFoundException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        Investment investment = getInvestment(id);
+        Calculation calculation = generateCalculation(jsonModel, investment);
 
-            Calculation calculation  = generateCalculation(calculationFactory.
-                    getInterface(jsonModel.getName()), investmentOptional.get(),jsonModel.getAmount());
-            calculationDAO.save(calculation);
-
-            return new ResultModel(calculation);
+        return new ResultModel(calculationDAO.save(calculation));
     }
 
-        private Calculation generateCalculation(CalculationInterface calculationInterface, Investment investment, double amount)
-                throws WrongDataException
-        {
-            int days = investment.getDateTo().getDayOfYear() - investment.getDateFrom().getDayOfYear();
-            double interestRate = investment.getInterestRate();
-            LocalDate today = LocalDate.now();
-            double profit = calculationInterface.calculateInterest(days, interestRate, amount);
-
-            return new Calculation(days, amount, today, investment, profit);
-    }
-
-    public ResultModel getCalculationById(int id){
+    public ResultModel getCalculationById(Integer id) {
         Optional<Calculation> calculationOptional = calculationDAO.findById(id);
-        if(!calculationOptional.isPresent()){
+        if (!calculationOptional.isPresent()) {
             throw new NotFoundException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage() + " " + id);
         }
         return new ResultModel(calculationOptional.get());
+    }
+
+    private Investment getInvestment(Integer id) {
+        Optional<Investment> investmentOptional = investmentDAO.findById(id);
+        if (!investmentOptional.isPresent())
+            throw new NotFoundException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        Investment inv = investmentOptional.get();
+
+        checkArgument(!inv.getDateFrom().isAfter(LocalDate.now()) && !inv.getDateTo().isBefore(LocalDate.now()),
+                ErrorMessages.INACTIVE_DATE.getErrorMessage() + inv.getDateFrom()
+                        + " - " + inv.getDateTo() + " Today is " + LocalDate.now());
+
+
+        return investmentOptional.get();
+
+    }
+
+    private CalculationInterface getInterface(TypeImplementation implementationName) {
+        return calculationFactory.getInterface(implementationName);
+    }
+
+    private Calculation generateCalculation(JsonModel jsonModel, Investment investment) throws WrongDataException {
+        CalculationInterface calculationImpl = getInterface(jsonModel.getName());
+        Double amount = jsonModel.getAmount();
+
+        Integer days = investment.getPeriodValue().getPeriod() * 30;
+        Double interestRate = investment.getInterestRate();
+        LocalDate today = LocalDate.now();
+
+        Double profit = calculationImpl.calculateInterest(days, interestRate, amount);
+
+        return new Calculation(amount, days, today, investment, profit);
     }
 }

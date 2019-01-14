@@ -41,8 +41,8 @@ public class InvestmentControllerTest {
     @MockBean
     private InvestmentDAO investmentDAO;
 
-    private LocalDate testDateFrom = LocalDate.now().minusYears(1);
-    private LocalDate testDateTo = LocalDate.now().plusYears(1);
+    private final LocalDate testDateFrom = LocalDate.now().minusYears(1);
+    private final LocalDate testDateTo = LocalDate.now().plusYears(1);
 
 
     @Test

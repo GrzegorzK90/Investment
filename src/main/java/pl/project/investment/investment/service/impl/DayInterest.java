@@ -3,7 +3,6 @@ package pl.project.investment.investment.service.impl;
 import org.decimal4j.util.DoubleRounder;
 import org.springframework.stereotype.Component;
 import pl.project.investment.investment.enums.TypeImplementation;
-
 /**
  * Class implementing CalculationInterface
  * used to calculate profit for each day
@@ -22,12 +21,11 @@ public class DayInterest extends CalculationImpl {
     double doCalc(int days, double interest, double amount) {
         double percentagePerDay = interest / DAYS_IN_YEAR / 100.0;
         double temp = amount;
-        double result;
-        for (int i = 0; i < days; i++) {
-            temp += temp * percentagePerDay;
-        }
-        result = temp - amount;
 
-        return DoubleRounder.round(result, 2);
+        for (int i = 0; i < days; i++) {
+            temp += DoubleRounder.round(temp * percentagePerDay, 2);
+        }
+
+        return DoubleRounder.round(temp - amount, 2);
     }
 }

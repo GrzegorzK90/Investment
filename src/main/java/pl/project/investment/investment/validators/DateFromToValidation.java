@@ -12,6 +12,6 @@ public class DateFromToValidation
     }
 
     public boolean isValid(InvestmentModel obj, ConstraintValidatorContext context) {
-        return (obj.getDateFrom().isBefore(obj.getDateTo()));
+        return (obj.getDateFrom().isBefore(obj.getDateTo()) || obj.getDateFrom().isEqual(obj.getDateTo()));
     }
 }

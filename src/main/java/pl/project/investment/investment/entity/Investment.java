@@ -3,7 +3,6 @@ package pl.project.investment.investment.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.NumberFormat;
-import pl.project.investment.investment.JSON.InvestmentModel;
 import pl.project.investment.investment.enums.PeriodValue;
 
 import javax.persistence.*;
@@ -54,11 +53,11 @@ public class Investment {
         this.dateTo = dateTo;
     }
 
-    public Investment(InvestmentModel investmentModel) {
-        this.name = investmentModel.getName();
-        this.interestRate = investmentModel.getInterestRate();
-        this.dateFrom = investmentModel.getDateFrom();
-        this.dateTo = investmentModel.getDateTo();
-        this.periodValue = investmentModel.getPeriodValue();
-    }
+//    public Investment(InvestmentModel investmentModel) {
+//        this.name = investmentModel.getName();
+//        this.interestRate = investmentModel.getInterestRate();
+//        this.dateFrom = investmentModel.getDateFrom();
+//        this.dateTo = investmentModel.getDateTo();
+//        this.periodValue = investmentModel.getPeriodValue();
+//    }
 }

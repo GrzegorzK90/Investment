@@ -16,6 +16,11 @@ public class AtTheEndInterestTest {
     }
 
     @Test
+    public void testCorrectResultMiniAmount() {
+        assertThat(calculationInterface.calculateInterest(360, 1.5, 250.0), CoreMatchers.is(3.75));
+    }
+
+    @Test
     public void testWrongValue() {
         assertThat(calculationInterface.calculateInterest(30, 4.5, 545456564), CoreMatchers.not(7500027.76));
     }

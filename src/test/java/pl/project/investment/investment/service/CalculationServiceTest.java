@@ -40,7 +40,7 @@ public class CalculationServiceTest {
 
     @Before
     public void init() {
-        investment = new Investment(1, "Lokata", 4.0, PeriodValue.valueOf(3),
+        investment = new Investment(1, "InvestmentTest", 4.0, PeriodValue.valueOf(3),
                 LocalDate.now().minusMonths(4),
                 LocalDate.now().plusMonths(5));
 
@@ -81,7 +81,7 @@ public class CalculationServiceTest {
     public void doCalculationAfterDate() {
         JsonModel jsonModel = new JsonModel(TypeImplementation.EndAlgorithm, 100.0);
 
-        investment = new Investment(1, "Lokata", 4.0, PeriodValue.valueOf(3),
+        investment = new Investment(1, "InvestmentTest", 4.0, PeriodValue.valueOf(3),
                 LocalDate.now().plusMonths(1),
                 LocalDate.now().plusMonths(2));
 
@@ -95,7 +95,7 @@ public class CalculationServiceTest {
     public void doCalculationThisDate() {
         JsonModel jsonModel = new JsonModel(TypeImplementation.EndAlgorithm, 100.0);
 
-        investment = new Investment(1, "Lokata", 4.0, PeriodValue.valueOf(3),
+        investment = new Investment(1, "InvestmentTest", 4.0, PeriodValue.valueOf(3),
                 LocalDate.now(),
                 LocalDate.now());
 

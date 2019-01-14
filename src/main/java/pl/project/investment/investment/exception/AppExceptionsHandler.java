@@ -40,6 +40,7 @@ public class AppExceptionsHandler {
         return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
+
     @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<Object> handleOtherException(Exception ex) {
         ErrorMessage errorMessage = new ErrorMessage(new Date(), ex.getMessage(), ex.toString());

@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import pl.project.investment.investment.JSON.InvestmentModel;
 import pl.project.investment.investment.dao.InvestmentDAO;
 import pl.project.investment.investment.entity.Investment;
+import pl.project.investment.investment.enums.PeriodValue;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -32,29 +33,17 @@ public class InvestmentServiceTest {
     public void save() {
         Investment savedInvestment = new Investment(1,
                 "Lokata",
-                4.0, 3,
-                LocalDate.of(2018,
-                        10,
-                        1),
-                LocalDate.of(2018,
-                        10,
-                        30));
+                4.0, PeriodValue.valueOf(3),
+                LocalDate.now().minusMonths(1),
+                LocalDate.now().plusMonths(1));
         InvestmentModel investment = new InvestmentModel("Lokata",
                 4.0, 3,
-                LocalDate.of(2018,
-                        10,
-                        1),
-                LocalDate.of(2018,
-                        10,
-                        30));
+                LocalDate.now().minusMonths(1),
+                LocalDate.now().plusMonths(1));
         Investment investment1 = new Investment("Lokata",
-                4.0, 3,
-                LocalDate.of(2018,
-                        10,
-                        1),
-                LocalDate.of(2018,
-                        10,
-                        30));
+                4.0, PeriodValue.valueOf(3),
+                LocalDate.now().minusMonths(1),
+                LocalDate.now().plusMonths(1));
 
         Mockito.when(investmentDAO.save(investment1)).thenReturn(savedInvestment);
 
@@ -65,10 +54,10 @@ public class InvestmentServiceTest {
     @Test
     public void getAllInvestment() {
         List<Investment> investments = Arrays.asList(
-                new Investment(1, "Lokata", 4.0, 3, LocalDate.of(2018, 10, 1),
-                        LocalDate.of(2018, 10, 30)),
-                new Investment(2, "Test", 4.0, 3, LocalDate.of(2018, 10, 1),
-                        LocalDate.of(2018, 10, 30))
+                new Investment(1, "Lokata", 4.0, PeriodValue.valueOf(3), LocalDate.now().minusMonths(1),
+                        LocalDate.now().plusMonths(1)),
+                new Investment(2, "Test", 4.0, PeriodValue.valueOf(3), LocalDate.now().minusYears(1),
+                        LocalDate.now().plusYears(1))
         );
         Mockito.when(investmentDAO.findAll()).thenReturn(investments);
 

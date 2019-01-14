@@ -10,7 +10,6 @@ import pl.project.investment.investment.entity.Calculation;
 import pl.project.investment.investment.entity.Investment;
 import pl.project.investment.investment.enums.ErrorMessages;
 import pl.project.investment.investment.enums.TypeImplementation;
-import pl.project.investment.investment.exception.InactiveDateException;
 import pl.project.investment.investment.exception.NotFoundException;
 import pl.project.investment.investment.exception.WrongDataException;
 
@@ -41,9 +40,8 @@ public class CalculationService {
 
         Investment investment = getInvestment(id);
         Calculation calculation = generateCalculation(jsonModel, investment);
-        ResultModel rm = new ResultModel(calculationDAO.save(calculation));
 
-        return rm;
+        return new ResultModel(calculationDAO.save(calculation));
     }
 
     public ResultModel getCalculationById(Integer id) {
@@ -60,12 +58,10 @@ public class CalculationService {
             throw new NotFoundException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
         Investment inv = investmentOptional.get();
 
-        if (inv.getDateFrom().isAfter(LocalDate.now()) || inv.getDateTo().isBefore(LocalDate.now()))
-            throw new InactiveDateException(ErrorMessages.INACTIVE_DATE.getErrorMessage() + inv.getDateFrom() + " - " + inv.getDateTo());
+        checkArgument(!inv.getDateFrom().isAfter(LocalDate.now()) && !inv.getDateTo().isBefore(LocalDate.now()),
+                ErrorMessages.INACTIVE_DATE.getErrorMessage() + inv.getDateFrom()
+                        + " - " + inv.getDateTo() + " Today is " + LocalDate.now());
 
-
-//        checkArgument(!(inv.getDateFrom().isAfter(LocalDate.now())) || !(inv.getDateTo().isBefore(LocalDate.now())),
-//                ErrorMessages.INACTIVE_DATE.getErrorMessage() + inv.getDateFrom() + " - " + inv.getDateTo());
 
         return investmentOptional.get();
 
@@ -79,7 +75,7 @@ public class CalculationService {
         CalculationInterface calculationImpl = getInterface(jsonModel.getName());
         Double amount = jsonModel.getAmount();
 
-        Integer days = investment.getDepositPeriod() * 30;
+        Integer days = investment.getPeriodValue().getPeriod() * 30;
         Double interestRate = investment.getInterestRate();
         LocalDate today = LocalDate.now();
 

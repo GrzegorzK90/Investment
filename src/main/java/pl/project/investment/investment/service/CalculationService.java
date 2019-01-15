@@ -2,8 +2,6 @@ package pl.project.investment.investment.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.project.investment.investment.JSON.JsonModel;
-import pl.project.investment.investment.JSON.ResultModel;
 import pl.project.investment.investment.dao.CalculationDAO;
 import pl.project.investment.investment.dao.InvestmentDAO;
 import pl.project.investment.investment.entity.Calculation;
@@ -12,6 +10,8 @@ import pl.project.investment.investment.enums.ErrorMessages;
 import pl.project.investment.investment.enums.TypeImplementation;
 import pl.project.investment.investment.exception.NotFoundException;
 import pl.project.investment.investment.exception.WrongDataException;
+import pl.project.investment.investment.model.JsonModel;
+import pl.project.investment.investment.model.ResultModel;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -74,12 +74,12 @@ public class CalculationService {
         CalculationInterface calculationImpl = getInterface(jsonModel.getName());
         Double amount = jsonModel.getAmount();
 
-        Integer days = investment.getPeriodValue().getPeriod() * 30;
+        Integer period = investment.getPeriodValue().getPeriod();
         Double interestRate = investment.getInterestRate();
         LocalDate today = LocalDate.now();
 
-        Double profit = calculationImpl.calculateInterest(days, interestRate, amount);
+        Double profit = calculationImpl.calculateInterest(period, interestRate, amount);
 
-        return new Calculation(amount, days, today, investment, profit);
+        return new Calculation(amount, period, today, investment, profit);
     }
 }

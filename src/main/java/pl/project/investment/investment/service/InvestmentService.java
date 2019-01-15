@@ -2,10 +2,10 @@ package pl.project.investment.investment.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.project.investment.investment.JSON.InvestmentModel;
 import pl.project.investment.investment.dao.InvestmentDAO;
 import pl.project.investment.investment.entity.Investment;
 import pl.project.investment.investment.enums.ErrorMessages;
+import pl.project.investment.investment.model.InvestmentModel;
 
 import java.util.List;
 

@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
-import pl.project.investment.investment.JSON.JsonModel;
-import pl.project.investment.investment.JSON.ResultModel;
 import pl.project.investment.investment.dao.CalculationDAO;
 import pl.project.investment.investment.dao.InvestmentDAO;
 import pl.project.investment.investment.entity.Calculation;
@@ -17,6 +15,8 @@ import pl.project.investment.investment.entity.Investment;
 import pl.project.investment.investment.enums.PeriodValue;
 import pl.project.investment.investment.enums.TypeImplementation;
 import pl.project.investment.investment.exception.NotFoundException;
+import pl.project.investment.investment.model.JsonModel;
+import pl.project.investment.investment.model.ResultModel;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -44,7 +44,7 @@ public class CalculationServiceTest {
                 LocalDate.now().minusMonths(4),
                 LocalDate.now().plusMonths(5));
 
-        calculation = new Calculation(100.0, 90, LocalDate.now(), investment, 3.33);
+        calculation = new Calculation(100.0, 3, LocalDate.now(), investment, 3.33);
     }
 
     @Test
@@ -63,11 +63,11 @@ public class CalculationServiceTest {
 
     @Test
     public void doCalculation() {
-        ResultModel rm = new ResultModel(100.0, 4.0, 90,
+        ResultModel rm = new ResultModel(100.0, 4.0, 3,
                 LocalDate.now(), 1.0, 1);
 
         JsonModel jsonModel = new JsonModel(TypeImplementation.EndAlgorithm, 100.0);
-        Calculation calculation2 = new Calculation(100.0, 90, LocalDate.now(), investment, 1.0);
+        Calculation calculation2 = new Calculation(100.0, 3, LocalDate.now(), investment, 1.0);
 
         when(investmentDAO.findById(1)).thenReturn(Optional.ofNullable(investment));
         when(calculationDAO.save(calculation2)).thenReturn(calculation2);
@@ -99,8 +99,8 @@ public class CalculationServiceTest {
                 LocalDate.now(),
                 LocalDate.now());
 
-        Calculation calculation = new Calculation(0, 100.0, 90, LocalDate.now(), investment, 1.0);
-        ResultModel rm = new ResultModel(100.0, 4.0, 90, LocalDate.now(), 1.0, 0);
+        Calculation calculation = new Calculation(0, 100.0, 3, LocalDate.now(), investment, 1.0);
+        ResultModel rm = new ResultModel(100.0, 4.0, 3, LocalDate.now(), 1.0, 0);
 
         when(investmentDAO.findById(1)).thenReturn(Optional.ofNullable(investment));
         when(calculationDAO.save(calculation)).thenReturn(calculation);

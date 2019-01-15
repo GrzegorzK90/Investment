@@ -15,19 +15,11 @@ public class MonthInterest extends CalculationImpl {
     }
 
     @Override
-    double doCalc(int days, double interest, double amount) {
-        int month = days / (int) DAYS_IN_MONTH;
+    double doCalc(int period, double interest, double amount) {
+
         double percentagePerMonth = interest / 12 / 100.0;
-        double result = forLoopCalculation(month, percentagePerMonth, amount);
+        double result = multipleCapitalizationCalc(period, percentagePerMonth, amount);
 
         return DoubleRounder.round(result - amount, 2);
     }
-
 }
-
-
-//
-//        for(int i = 0; i < month; i++){
-//            temp+= temp * percentagePerMonth;
-//            temp = DoubleRounder.round(temp,2);
-//        }

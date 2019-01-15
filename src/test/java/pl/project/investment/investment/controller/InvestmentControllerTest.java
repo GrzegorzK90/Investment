@@ -138,8 +138,8 @@ public class InvestmentControllerTest {
                 testDateFrom,
                 testDateTo);
 
-        Calculation calculation2 = new Calculation(0, 100.00, 90, LocalDate.now(), inv, 1.0);
-        Calculation calculation1 = new Calculation(1, 100.00, 90, LocalDate.now(), inv, 1.0);
+        Calculation calculation2 = new Calculation(0, 100.00, 3, LocalDate.now(), inv, 1.0);
+        Calculation calculation1 = new Calculation(1, 100.00, 3, LocalDate.now(), inv, 1.0);
 
         when(investmentDAO.findById(1)).thenReturn(Optional.of(inv));
         when(calculationDAO.save(calculation2)).thenReturn(calculation1);
@@ -206,14 +206,14 @@ public class InvestmentControllerTest {
                 testDateFrom,
                 testDateTo);
 
-        Calculation cal = new Calculation(1, 1000.0, 90, LocalDate.now(), inv, 3.33);
+        Calculation cal = new Calculation(1, 1000.0, 3, LocalDate.now(), inv, 3.33);
 
         when(calculationDAO.findById(1)).thenReturn(Optional.of(cal));
 
         mockMvc.perform(get("/calculations/{id}", 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("@.amount", is(1000.0)))
-                .andExpect(jsonPath("@.period", is(90)));
+                .andExpect(jsonPath("@.period", is(3)));
     }
 
     @Test

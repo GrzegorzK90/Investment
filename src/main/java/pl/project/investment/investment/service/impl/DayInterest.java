@@ -18,18 +18,10 @@ public class DayInterest extends CalculationImpl {
     }
 
     @Override
-    double doCalc(int days, double interest, double amount) {
+    double doCalc(int period, double interest, double amount) {
         double percentagePerDay = interest / DAYS_IN_YEAR / 100.0;
-        double result = forLoopCalculation(days,percentagePerDay,amount);
+        double result = multipleCapitalizationCalc(period * DAYS_IN_MONTH, percentagePerDay, amount);
 
         return DoubleRounder.round(result - amount, 2);
     }
 }
-
-
-
-//        double temp = amount;
-//
-//        for (int i = 0; i < days; i++) {
-//            temp += DoubleRounder.round(temp * percentagePerDay, 2);
-//        }

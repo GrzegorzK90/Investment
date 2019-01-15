@@ -1,4 +1,4 @@
-package pl.project.investment.investment.response;
+package pl.project.investment.investment.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

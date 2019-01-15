@@ -16,8 +16,8 @@ public class AtTheEndInterest extends CalculationImpl {
     private final TypeImplementation type = TypeImplementation.EndAlgorithm;
 
     @Override
-    double doCalc(int days, double interest, double amount) {
-        double result = amount * (((interest / 100)) * ((days / DAYS_IN_MONTH) / 12));
+    double doCalc(int period, double interest, double amount) {
+        double result = amount * (((interest / 100)) * (period / 12.00));
         return DoubleRounder.round(result, 2);
     }
 

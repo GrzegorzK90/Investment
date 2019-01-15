@@ -1,4 +1,4 @@
-package pl.project.investment.investment.JSON;
+package pl.project.investment.investment.model;
 
 import lombok.Data;
 import org.springframework.format.annotation.NumberFormat;

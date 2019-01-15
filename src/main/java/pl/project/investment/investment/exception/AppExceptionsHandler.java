@@ -8,7 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import pl.project.investment.investment.enums.ErrorMessages;
-import pl.project.investment.investment.response.ErrorMessage;
+import pl.project.investment.investment.model.ErrorMessage;
 
 import java.util.Date;
 

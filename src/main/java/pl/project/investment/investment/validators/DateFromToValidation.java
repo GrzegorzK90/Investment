@@ -1,6 +1,6 @@
 package pl.project.investment.investment.validators;
 
-import pl.project.investment.investment.JSON.InvestmentModel;
+import pl.project.investment.investment.model.InvestmentModel;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

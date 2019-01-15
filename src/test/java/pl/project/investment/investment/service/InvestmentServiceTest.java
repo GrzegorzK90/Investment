@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
-import pl.project.investment.investment.JSON.InvestmentModel;
 import pl.project.investment.investment.dao.InvestmentDAO;
 import pl.project.investment.investment.entity.Investment;
 import pl.project.investment.investment.enums.PeriodValue;
+import pl.project.investment.investment.model.InvestmentModel;
 
 import java.time.LocalDate;
 import java.util.Arrays;
